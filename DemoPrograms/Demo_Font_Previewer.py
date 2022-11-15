@@ -4,8 +4,7 @@ import PySimpleGUI as sg
 from tkinter import font
 import tkinter
 root = tkinter.Tk()
-fonts = list(font.families())
-fonts.sort()
+fonts = sorted(font.families())
 root.destroy()
 
 '''

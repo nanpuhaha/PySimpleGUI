@@ -32,7 +32,7 @@ import random
 
 
 class Gauge():
-    def mapping(func, sequence, *argc):
+    def mapping(self, sequence, *argc):
         """
         Map function with extra argument, not for tuple.
         : Parameters
@@ -43,11 +43,11 @@ class Gauge():
           list of func(element of sequence, *argc)
         """
         if isinstance(sequence, list):
-            return list(map(lambda i: func(i, *argc), sequence))
+            return list(map(lambda i: self(i, *argc), sequence))
         else:
-            return func(sequence, *argc)
+            return self(sequence, *argc)
 
-    def add(number1, number2):
+    def add(self, number2):
         """
         Add two number
         : Parameter
@@ -56,9 +56,9 @@ class Gauge():
         : Return
           Addition result for number1 and number2.
         """
-        return number1 + number1
+        return self + self
 
-    def limit(number):
+    def limit(self):
         """
         Limit angle in range 0 ~ 360
         : Parameter
@@ -66,7 +66,7 @@ class Gauge():
         : Return
           angel degree in 0 ~ 360, return 0 if number < 0, 360 if number > 360.
         """
-        return max(min(360, number), 0)
+        return max(min(360, self), 0)
 
     class Clock():
         """
@@ -256,21 +256,22 @@ class Gauge():
         call it with degree and step to set initial options for rotation.
         Without any option to start rotation.
         """
-        if self.pointer:
-            if degree != None:
-                self.pointer.stop_degree = degree
-                self.pointer.step = step if self.pointer.all[2] < degree else -step
-                return True
-            now = self.pointer.all[2]
-            step = self.pointer.step
-            new_degree = now + step
-            if ((step > 0 and new_degree < self.pointer.stop_degree) or
-                (step < 0 and new_degree > self.pointer.stop_degree)):
-                    self.pointer.new(degree=new_degree, color='red' if new_degree > 90 else None)
-                    return False
-            else:
-                self.pointer.new(degree=self.pointer.stop_degree, color='red' if self.pointer.stop_degree > 90 else None)
-                return True
+        if not self.pointer:
+            return
+        if degree != None:
+            self.pointer.stop_degree = degree
+            self.pointer.step = step if self.pointer.all[2] < degree else -step
+            return True
+        now = self.pointer.all[2]
+        step = self.pointer.step
+        new_degree = now + step
+        if ((step > 0 and new_degree < self.pointer.stop_degree) or
+            (step < 0 and new_degree > self.pointer.stop_degree)):
+                self.pointer.new(degree=new_degree, color='red' if new_degree > 90 else None)
+                return False
+        else:
+            self.pointer.new(degree=self.pointer.stop_degree, color='red' if self.pointer.stop_degree > 90 else None)
+            return True
 
 
 
@@ -311,8 +312,24 @@ def main(location):
 
     def GraphColumn(name, key):
         layout = [
-            [sg.Graph(gsize, (-gsize[0] // 2, 0), (gsize[0] // 2, gsize[1]), key=key+'-GRAPH-')],
-            [sg.T(size=(5, 1), justification='c', font='Courier 14', k=key+'-GAUGE VALUE-')]]
+            [
+                sg.Graph(
+                    gsize,
+                    (-gsize[0] // 2, 0),
+                    (gsize[0] // 2, gsize[1]),
+                    key=f'{key}-GRAPH-',
+                )
+            ],
+            [
+                sg.T(
+                    size=(5, 1),
+                    justification='c',
+                    font='Courier 14',
+                    k=f'{key}-GAUGE VALUE-',
+                )
+            ],
+        ]
+
         return sg.Column(layout, pad=(2, 2), element_justification='c')
 
     num_cores = len(psutil.cpu_percent(percpu=True))        # get the number of cores in the CPU
@@ -328,7 +345,16 @@ def main(location):
     # add on the graphs
     for rows in range(num_cores//NUM_COLS+1):
         # for cols in range(min(num_cores-rows*NUM_COLS, NUM_COLS)):
-        layout += [[GraphColumn('CPU '+str(rows*NUM_COLS+cols), '-CPU-'+str(rows*NUM_COLS+cols)) for cols in range(min(num_cores-rows*NUM_COLS, NUM_COLS))]]
+        layout += [
+            [
+                GraphColumn(
+                    f'CPU {str(rows * NUM_COLS + cols)}',
+                    f'-CPU-{str(rows * NUM_COLS + cols)}',
+                )
+                for cols in range(min(num_cores - rows * NUM_COLS, NUM_COLS))
+            ]
+        ]
+
 
     # ----------------  Create Window  ----------------
     window = sg.Window('CPU Cores Usage Widget', layout,
@@ -345,9 +371,16 @@ def main(location):
                        right_click_menu=[[''], 'Exit'])
 
     # setup graphs & initial values
-    graphs = [DashGraph(window['-CPU-'+str(i)+'-GRAPH-'],
-                                window['-CPU-'+str(i) + '-GAUGE VALUE-'],
-                                0, colors[i%6]) for i in range(num_cores) ]
+    graphs = [
+        DashGraph(
+            window[f'-CPU-{str(i)}-GRAPH-'],
+            window[f'-CPU-{str(i)}-GAUGE VALUE-'],
+            0,
+            colors[i % 6],
+        )
+        for i in range(num_cores)
+    ]
+
 
     # ----------------  main loop  ----------------
     while True :

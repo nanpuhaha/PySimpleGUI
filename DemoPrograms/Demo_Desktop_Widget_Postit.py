@@ -35,7 +35,7 @@ def main():
     loc =  sg.user_settings_get_entry('-location-', (None, None))
     window = make_window(loc)
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         event, values = window.read()
         print(event, values)
         if event in (sg.WIN_CLOSED, 'Exit'):
@@ -45,8 +45,12 @@ def main():
         if event == 'Edit Me':
             sg.execute_editor(__file__)
         elif event == 'Change Font':
-            font = sg.popup_get_text('Main Information Font and Size (e.g. courier 70)', default_text=sg.user_settings_get_entry('-font-'), keep_on_top=True, location=window.current_location())
-            if font:
+            if font := sg.popup_get_text(
+                'Main Information Font and Size (e.g. courier 70)',
+                default_text=sg.user_settings_get_entry('-font-'),
+                keep_on_top=True,
+                location=window.current_location(),
+            ):
                 sg.user_settings_set_entry('-font-', font)
                 loc = window.current_location()
                 window.close()

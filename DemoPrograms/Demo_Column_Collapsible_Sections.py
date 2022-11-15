@@ -27,9 +27,26 @@ def Collapsible(layout, key, title='', arrows=(sg.SYMBOL_DOWN, sg.SYMBOL_UP), co
     :param collapsed:bool: If True, then the section begins in a collapsed state
     :return:sg.Column: Column including the arrows, title and the layout that is pinned
     """
-    return sg.Column([[sg.T((arrows[1] if collapsed else arrows[0]), enable_events=True, k=key+'-BUTTON-'),
-                       sg.T(title, enable_events=True, key=key+'-TITLE-')],
-                      [sg.pin(sg.Column(layout, key=key, visible=not collapsed, metadata=arrows))]], pad=(0,0))
+    return sg.Column(
+        [
+            [
+                sg.T(
+                    arrows[1] if collapsed else arrows[0],
+                    enable_events=True,
+                    k=f'{key}-BUTTON-',
+                ),
+                sg.T(title, enable_events=True, key=f'{key}-TITLE-'),
+            ],
+            [
+                sg.pin(
+                    sg.Column(
+                        layout, key=key, visible=not collapsed, metadata=arrows
+                    )
+                )
+            ],
+        ],
+        pad=(0, 0),
+    )
 
 
 SEC1_KEY = '-SECTION1-'
@@ -60,16 +77,26 @@ window = sg.Window('Visible / Invisible Element Demo', layout)
 while True:             # Event Loop
     event, values = window.read()
     print(event, values)
-    if event == sg.WIN_CLOSED or event == 'Exit':
+    if event in [sg.WIN_CLOSED, 'Exit']:
         break
 
     if event.startswith(SEC1_KEY):
         window[SEC1_KEY].update(visible=not window[SEC1_KEY].visible)
-        window[SEC1_KEY+'-BUTTON-'].update(window[SEC1_KEY].metadata[0] if window[SEC1_KEY].visible else window[SEC1_KEY].metadata[1])
+        window[f'{SEC1_KEY}-BUTTON-'].update(
+            window[SEC1_KEY].metadata[0]
+            if window[SEC1_KEY].visible
+            else window[SEC1_KEY].metadata[1]
+        )
+
 
     if event.startswith(SEC2_KEY) or event == '-OPEN SEC2-CHECKBOX-':
         window[SEC2_KEY].update(visible=not window[SEC2_KEY].visible)
-        window[SEC2_KEY+'-BUTTON-'].update(window[SEC2_KEY].metadata[0] if window[SEC2_KEY].visible else window[SEC2_KEY].metadata[1])
+        window[f'{SEC2_KEY}-BUTTON-'].update(
+            window[SEC2_KEY].metadata[0]
+            if window[SEC2_KEY].visible
+            else window[SEC2_KEY].metadata[1]
+        )
+
         window['-OPEN SEC2-CHECKBOX-'].update(not window[SEC2_KEY].visible)
 
 window.close()

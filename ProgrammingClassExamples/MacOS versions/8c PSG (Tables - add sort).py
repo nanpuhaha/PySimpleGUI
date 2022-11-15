@@ -28,18 +28,18 @@ def table_example():
     #initialise variables
     data = []
     header_list = []
-    with open(filename, "r") as infile:    
+    with open(filename, "r") as infile:
         reader = csv.reader(infile)
-        for i in range (1):               
+        for _ in range (1):
             header = next(reader)
-            data = list(reader)             
-    header = header + ['%', 'Pts']      
+            data = list(reader)
+    header = header + ['%', 'Pts']
     for i in range (len(data)):
     #calculate % 
         percent = int(data[i][5])/int(data[i][6])*100
         data[i] = data[i] + [percent]       
         pts = int(data[i][2])*4 + int(data[i][4])*2
-        data[i] = data[i] + [pts]          
+        data[i] = data[i] + [pts]
     #sort data
     #first by %
 
@@ -50,7 +50,7 @@ def table_example():
 
     #and format string to 2 decimal places
     for i in range(len(data)):
-        data[i][7] = str('{:.2f}'.format(data[i][7]))
+        data[i][7] = '{:.2f}'.format(data[i][7])
 
     #use Table (explore settings) and add to column layout
     #
@@ -70,8 +70,7 @@ swindow = sg.Window('Load File', location = (350,250)).Layout(slayout)
 
 while True:
     button, value = swindow.Read()
-    if button is not None:
-        if button == 'Load File':
-            table_example()
-    else:
+    if button is None:
         break
+    if button == 'Load File':
+        table_example()

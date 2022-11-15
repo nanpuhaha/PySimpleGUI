@@ -73,10 +73,7 @@ def find_in_file(string):
         filename = os.path.join(demo_path, file)
         try:
             with open(filename, 'r', encoding="utf8") as f:
-                for line in f.readlines():
-                    if string in line.lower():
-                        file_list.append(file)
-                        # print(f'{os.path.basename(file)} -- {line}')
+                file_list.extend(file for line in f if string in line.lower())
         except Exception as e:
             pass
             # print(e)
@@ -184,7 +181,7 @@ def main():
 
     while True:
         event, values = window.read()
-        if event == sg.WINDOW_CLOSED or event == 'Exit':
+        if event in [sg.WINDOW_CLOSED, 'Exit']:
             break
         if event == 'Copy':
             confirm = sg.popup_yes_no('Are you sure you want to copy:', *values['-DEMO LIST-'], keep_on_top=True)
@@ -198,7 +195,13 @@ def main():
                 sg.cprint('Copy complete', background_color='red', text_color='white')
         elif event == 'Edit':
             for file in values['-DEMO LIST-']:
-                sg.cprint(f'opening (in PyCharm)', text_color='white', background_color='red', end='')
+                sg.cprint(
+                    'opening (in PyCharm)',
+                    text_color='white',
+                    background_color='red',
+                    end='',
+                )
+
                 sg.cprint(f' {os.path.join(demo_path, file)}', text_color='purple')
                 execute_command_subprocess(f'{editor_program}', os.path.join(demo_path, file))
         elif event == 'Run':
@@ -259,10 +262,14 @@ def run_py(pyfile, parms=None):
 
 def execute_command_subprocess(command, *args, wait=False):
     if sys.platform == 'linux':
-        arg_string = ''
-        for arg in args:
-            arg_string += ' ' + str(arg)
-        sp = subprocess.Popen(['python3' + arg_string, ], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        arg_string = ''.join(f' {str(arg)}' for arg in args)
+        sp = subprocess.Popen(
+            [f'python3{arg_string}'],
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
     else:
         expanded_args = ' '.join(args)
         sp = subprocess.Popen([command, expanded_args], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

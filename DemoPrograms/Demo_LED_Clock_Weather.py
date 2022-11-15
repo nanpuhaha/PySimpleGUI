@@ -45,17 +45,48 @@ class GUI():
              sg.Image(data=ledblank[22:], key='-min2-')], ]
 
         # Create the weather columns layout
-        weather_cols = []
-        for i in range(NUM_COLS):
-            weather_cols.append(
-                [[sg.Text('', size=(4, 1), font='Any 20',
-                    justification='center', key='-DAY-' + str(i)), ],
-                 [sg.Image(data=w1[22:], background_color='black',
-                           key='-icon-'+str(i), pad=((4, 0), 3)), ],
-                 [sg.Text('--', size=(3, 1), justification='center',
-                       font='Any 20', key='-high-' + str(i), pad=((10, 0), 3))],
-                 [sg.Text('--', size=(3, 1), justification='center',
-                    font='Any 20', key='-low-' + str(i), pad=((10, 0), 3))]])
+        weather_cols = [
+            [
+                [
+                    sg.Text(
+                        '',
+                        size=(4, 1),
+                        font='Any 20',
+                        justification='center',
+                        key=f'-DAY-{str(i)}',
+                    )
+                ],
+                [
+                    sg.Image(
+                        data=w1[22:],
+                        background_color='black',
+                        key=f'-icon-{str(i)}',
+                        pad=((4, 0), 3),
+                    )
+                ],
+                [
+                    sg.Text(
+                        '--',
+                        size=(3, 1),
+                        justification='center',
+                        font='Any 20',
+                        key=f'-high-{str(i)}',
+                        pad=((10, 0), 3),
+                    )
+                ],
+                [
+                    sg.Text(
+                        '--',
+                        size=(3, 1),
+                        justification='center',
+                        font='Any 20',
+                        key=f'-low-{str(i)}',
+                        pad=((10, 0), 3),
+                    )
+                ],
+            ]
+            for i in range(NUM_COLS)
+        ]
 
         # Create the overall layout
         layout = [[sg.Col(clock, background_color='black')],
@@ -97,7 +128,7 @@ class GUI():
     def update_weather(self):
         forecast = forecastio.load_forecast(self.api_key, self.lat, self.lng)
         daily = forecast.daily()
-        today_weekday = datetime.datetime.today().weekday()
+        today_weekday = datetime.datetime.now().weekday()
 
         max_temps = []
         min_temps = []
@@ -108,10 +139,10 @@ class GUI():
             min_temps.append(int(daily_data.d['temperatureMin']))
 
         for i in range(NUM_COLS):
-            day_element = self.window['-DAY-' + str(i)]
-            max_element = self.window['-high-' + str(i)]
-            min_element = self.window['-low-' + str(i)]
-            icon_element = self.window['-icon-' + str(i)]
+            day_element = self.window[f'-DAY-{str(i)}']
+            max_element = self.window[f'-high-{str(i)}']
+            min_element = self.window[f'-low-{str(i)}']
+            icon_element = self.window[f'-icon-{str(i)}']
             day_element.update(calendar.day_abbr[(today_weekday + i) % 7])
             max_element.update(max_temps[i])
             min_element.update(min_temps[i])

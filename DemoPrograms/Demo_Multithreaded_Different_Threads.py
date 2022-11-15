@@ -39,7 +39,7 @@ def worker_thread1(thread_name, run_freq,  window):
     :type window: sg.Window
     :return:
     """
-    print('Starting thread 1 - {} that runs every {} ms'.format(thread_name, run_freq))
+    print(f'Starting thread 1 - {thread_name} that runs every {run_freq} ms')
     for i in itertools.count():                             # loop forever, keeping count in i as it loops
         time.sleep(run_freq/1000)                           # sleep for a while
         # put a message into queue for GUI
@@ -57,7 +57,7 @@ def worker_thread2(thread_name, run_freq,  window):
     :type window: sg.Window
     :return:
     """
-    print('Starting thread 2 - {} that runs every {} ms'.format(thread_name, run_freq))
+    print(f'Starting thread 2 - {thread_name} that runs every {run_freq} ms')
     for i in itertools.count():                             # loop forever, keeping count in i as it loops
         time.sleep(run_freq/1000)                           # sleep for a while
         # put a message into queue for GUI
@@ -75,7 +75,7 @@ def worker_thread3(thread_name, run_freq,  window):
     :type window: sg.Window
     :return:
     """
-    print('Starting thread 3 - {} that runs every {} ms'.format(thread_name, run_freq))
+    print(f'Starting thread 3 - {thread_name} that runs every {run_freq} ms')
     for i in itertools.count():                             # loop forever, keeping count in i as it loops
         time.sleep(run_freq/1000)                           # sleep for a while
         # put a message into queue for GUI

@@ -31,6 +31,6 @@ while True:
             window.FindElement('_result_').Update(fahrenheit)    
         except ValueError:
             sg.Popup('Error','Please try again')        
-       
+
     else:
         break

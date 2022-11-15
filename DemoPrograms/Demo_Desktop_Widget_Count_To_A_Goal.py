@@ -26,7 +26,7 @@ main_info_size = (3,1)
 
 
 class Gauge():
-    def mapping(func, sequence, *argc):
+    def mapping(self, sequence, *argc):
         """
         Map function with extra argument, not for tuple.
         : Parameters
@@ -37,11 +37,11 @@ class Gauge():
           list of func(element of sequence, *argc)
         """
         if isinstance(sequence, list):
-            return list(map(lambda i: func(i, *argc), sequence))
+            return list(map(lambda i: self(i, *argc), sequence))
         else:
-            return func(sequence, *argc)
+            return self(sequence, *argc)
 
-    def add(number1, number2):
+    def add(self, number2):
         """
         Add two number
         : Parameter
@@ -50,9 +50,9 @@ class Gauge():
         : Return
           Addition result for number1 and number2.
         """
-        return number1 + number1
+        return self + self
 
-    def limit(number):
+    def limit(self):
         """
         Limit angle in range 0 ~ 360
         : Parameter
@@ -60,7 +60,7 @@ class Gauge():
         : Return
           angel degree in 0 ~ 360, return 0 if number < 0, 360 if number > 360.
         """
-        return max(min(360, number), 0)
+        return max(min(360, self), 0)
     class Clock():
         """
         Draw background circle or arc
@@ -359,7 +359,7 @@ def main():
     window['-MAIN INFO-'].update(current_count)
     window['-GOAL-'].update(current_goal)
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         window.gauge.change()
         new_angle = current_count / current_goal * 180
         window.gauge.change(degree=new_angle, step=180)
@@ -370,7 +370,7 @@ def main():
         # -------------- Start of normal event loop --------------
         event, values = window.read()
         print(event, values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if event == 'Edit Me':
             sg.execute_editor(__file__)
@@ -409,14 +409,26 @@ def main():
                 # this is result of hacking code down to 99 lines in total. Not tried it before. Interesting test.
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Main Font':
-            font = sg.popup_get_text('Main Information Font and Size (e.g. courier 70)', default_text=sg.user_settings_get_entry('-main number font-', main_number_font),location=window.current_location(), keep_on_top=True)
-            if font:
+            if font := sg.popup_get_text(
+                'Main Information Font and Size (e.g. courier 70)',
+                default_text=sg.user_settings_get_entry(
+                    '-main number font-', main_number_font
+                ),
+                location=window.current_location(),
+                keep_on_top=True,
+            ):
                 loc = window.current_location()
                 sg.user_settings_set_entry('-main number font-', font)
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Title Font':
-            font = sg.popup_get_text('Title Font and Size (e.g. courier 8)', default_text=sg.user_settings_get_entry('-title font-', title_font), location=window.current_location(), keep_on_top=True)
-            if font:
+            if font := sg.popup_get_text(
+                'Title Font and Size (e.g. courier 8)',
+                default_text=sg.user_settings_get_entry(
+                    '-title font-', title_font
+                ),
+                location=window.current_location(),
+                keep_on_top=True,
+            ):
                 loc = window.current_location()
                 sg.user_settings_set_entry('-title font-', font)
                 _, window = window.close(), make_window(loc)

@@ -25,8 +25,8 @@ def long_operation_thread(seconds, window):
     :param seconds: (int) How long to sleep, the ultimate blocking call
     """
     progress = 0
-    print('Thread started - will sleep for {} seconds'.format(seconds))
-    for i in range(int(seconds * 10)):
+    print(f'Thread started - will sleep for {seconds} seconds')
+    for _ in range(int(seconds * 10)):
         time.sleep(.1)  # sleep for a while
         progress += 100 / (seconds * 10)
         window.write_event_value('-PROGRESS-', progress)
@@ -61,7 +61,10 @@ def the_gui():
         if event in (sg.WIN_CLOSED, 'Exit'):
             break
         elif event.startswith('Do') and not thread:
-            print('Thread Starting! Long work....sending value of {} seconds'.format(float(values['-SECONDS-'])))
+            print(
+                f"Thread Starting! Long work....sending value of {float(values['-SECONDS-'])} seconds"
+            )
+
             timeout = 100 if values['-ONE CHUNK-'] else None
             thread = threading.Thread(target=long_operation_thread, args=(float(values['-SECONDS-']),window), daemon=True)
             thread.start()

@@ -17,10 +17,40 @@ MAX_ROWS, MAX_COLS, COL_HEADINGS = 15, 6, ('A', 'B', 'C', 'D', 'E', 'F',)
 # Normally a layout is specified 1 ROW at a time. Here multiple rows are being contatenated together to produce the layout
 # Note the " + \ " at the ends of the lines rather than the usual " , "
 # This is done because each line is a list of lists
-layout = [[sg.Text('Click on a column header to sort by that column', font='Default 16')]] + \
-         [[sg.Text(' ' * 15)] + [sg.Text(s, key=s, enable_events=True, font='Courier 14', size=(8, 1)) for i, s in enumerate(COL_HEADINGS)]] + \
-         [[sg.T(r, size=(4, 1))] + [sg.Input(randint(0, 100), justification='r', key=(r, c)) for c in range(MAX_COLS)] for r in range(MAX_ROWS)] + \
-         [[sg.Button('Show Table As Lists'), sg.Button('Exit')]]
+layout = (
+    (
+        [
+            [
+                sg.Text(
+                    'Click on a column header to sort by that column',
+                    font='Default 16',
+                )
+            ]
+        ]
+        + [
+            [sg.Text(' ' * 15)]
+            + [
+                sg.Text(
+                    s,
+                    key=s,
+                    enable_events=True,
+                    font='Courier 14',
+                    size=(8, 1),
+                )
+                for s in COL_HEADINGS
+            ]
+        ]
+    )
+    + [
+        [sg.T(r, size=(4, 1))]
+        + [
+            sg.Input(randint(0, 100), justification='r', key=(r, c))
+            for c in range(MAX_COLS)
+        ]
+        for r in range(MAX_ROWS)
+    ]
+) + [[sg.Button('Show Table As Lists'), sg.Button('Exit')]]
+
 
 # Create the window
 window = sg.Window('A Table Simulation', layout, default_element_size=(12, 1), element_padding=(1, 1), return_keyboard_events=True)

@@ -32,14 +32,15 @@ def main():
         source_file = values['-sourcefile-']
         icon_file = values['-iconfile-']
 
-        icon_option = '-i "{}"'.format(icon_file) if icon_file else ''
+        icon_option = f'-i "{icon_file}"' if icon_file else ''
         source_path, source_filename = os.path.split(source_file)
-        workpath_option = '--workpath "{}"'.format(source_path)
-        dispath_option = '--distpath "{}"'.format(source_path)
-        specpath_option = '--specpath "{}"'.format(source_path)
+        workpath_option = f'--workpath "{source_path}"'
+        dispath_option = f'--distpath "{source_path}"'
+        specpath_option = f'--specpath "{source_path}"'
         folder_to_remove = os.path.join(source_path, source_filename[:-3])
-        file_to_remove = os.path.join(source_path, source_filename[:-3]+'.spec')
-        command_line = 'pyinstaller -wF --clean "{}" {} {} {} {}'.format(source_file, icon_option, workpath_option, dispath_option, specpath_option)
+        file_to_remove = os.path.join(source_path, f'{source_filename[:-3]}.spec')
+        command_line = f'pyinstaller -wF --clean "{source_file}" {icon_option} {workpath_option} {dispath_option} {specpath_option}'
+
 
         if event == 'Make EXE':
             try:

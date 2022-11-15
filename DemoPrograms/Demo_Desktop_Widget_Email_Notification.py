@@ -34,9 +34,13 @@ def gui():
                     tooltip='Closes window')],
               [sg.Text('', key='-status-', size=(25, 1))], ]
 
-    for i in range(MAX_EMAILS):
-        layout.append([sg.Text('', size=(20, 1), key='{}date'.format(i), font='Sans 8'),
-                       sg.Text('', size=(45, 1), font='Sans 8', key='{}from'.format(i))])
+    layout.extend(
+        [
+            sg.Text('', size=(20, 1), key=f'{i}date', font='Sans 8'),
+            sg.Text('', size=(45, 1), font='Sans 8', key=f'{i}from'),
+        ]
+        for i in range(MAX_EMAILS)
+    )
 
     window = sg.Window('',
                        layout,
@@ -76,22 +80,24 @@ def read_mail(window):
     (retcode, capabilities) = mail.login(LOGIN_EMAIL, LOGIN_PASSWORD)
     mail.list()
     typ, data = mail.select('Inbox')
-    n = 0
     now = datetime.now()
     # get messages from today
-    search_string = '(SENTON {}-{}-{})'.format(now.day,
-                                               calendar.month_abbr[now.month], now.year)
+    search_string = (
+        f'(SENTON {now.day}-{calendar.month_abbr[now.month]}-{now.year})'
+    )
+
     (retcode, messages) = mail.search(None, search_string)
     if retcode == 'OK':
         # message numbers are separated by spaces, turn into list
         msg_list = messages[0].split()
         msg_list.sort(reverse=True)  # sort messages descending
+        n = 0
         for n, message in enumerate(msg_list):
             if n >= MAX_EMAILS:
                 break
 
-            from_elem = window['{}from'.format(n)]
-            date_elem = window['{}date'.format(n)]
+            from_elem = window[f'{n}from']
+            date_elem = window[f'{n}date']
             from_elem.update('')  # erase them so you know they're changing
             date_elem.update('')
             window.refresh()

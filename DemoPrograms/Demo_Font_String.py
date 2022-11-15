@@ -22,8 +22,7 @@ while True:     # Event Loop
     event, values = window.read()
     if event in (sg.WIN_CLOSED, 'Exit'):
         break
-    font_string = 'Helvitica '
-    font_string += str(int(values['-slider-']))
+    font_string = 'Helvitica ' + str(int(values['-slider-']))
     if values['-bold-']:
         font_string += ' bold'
     if values['-italics-']:

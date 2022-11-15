@@ -29,9 +29,40 @@ def title_bar(title, text_color, background_color):
     tc = text_color
     font = 'Helvetica 12'
 
-    return [sg.Col([[sg.T(title, text_color=tc, background_color=bc, font=font, grab=True)]], pad=(0, 0), background_color=bc),
-            sg.Col([[sg.T('_', text_color=tc, background_color=bc, enable_events=True, font=font, key='-MINIMIZE-'), sg.Text('❎', text_color=tc, background_color=bc, font=font, enable_events=True, key='Exit')]], element_justification='r', key='-C-', grab=True,
-                   pad=(0, 0), background_color=bc)]
+    return [
+        sg.Col(
+            [[sg.T(title, tc=tc, bc=bc, font=font, grab=True)]],
+            pad=(0, 0),
+            bc=bc,
+        ),
+        sg.Col(
+            [
+                [
+                    sg.T(
+                        '_',
+                        tc=tc,
+                        bc=bc,
+                        enable_events=True,
+                        font=font,
+                        key='-MINIMIZE-',
+                    ),
+                    sg.Text(
+                        '❎',
+                        tc=tc,
+                        bc=bc,
+                        font=font,
+                        enable_events=True,
+                        key='Exit',
+                    ),
+                ]
+            ],
+            element_justification='r',
+            key='-C-',
+            grab=True,
+            pad=(0, 0),
+            bc=bc,
+        ),
+    ]
 
 
 

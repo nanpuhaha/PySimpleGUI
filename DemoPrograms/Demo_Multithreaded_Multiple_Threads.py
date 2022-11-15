@@ -71,8 +71,8 @@ def the_gui():
         event, values = window.read()
         if event in (sg.WIN_CLOSED, 'Exit'):
             break
-        if event == 'Go':           # clicking "Go" starts a long running work item by starting thread
-            window['-OUTPUT-'].update('Starting long work %s' % work_id)
+        if event == 'Go':   # clicking "Go" starts a long running work item by starting thread
+            window['-OUTPUT-'].update(f'Starting long work {work_id}')
             window[work_id].update(text_color='red')
             # LOCATION 2
             # STARTING long run by starting a thread
@@ -90,8 +90,7 @@ def the_gui():
             # You can check the completed_work_id variable
             # to see exactly which long-running function completed
             completed_work_id = values[event]
-            window['-OUTPUT2-'].update(
-                'Complete Work ID "{}"'.format(completed_work_id))
+            window['-OUTPUT2-'].update(f'Complete Work ID "{completed_work_id}"')
             window[completed_work_id].update(text_color='green')
 
         if event == 'Popup':

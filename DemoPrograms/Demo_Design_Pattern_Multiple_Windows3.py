@@ -31,10 +31,10 @@ window1, window2, window3 = make_window1(), None, None
 
 while True:
     window, event, values = sg.read_all_windows()
-    if window == window1 and event in (sg.WIN_CLOSED, 'Exit'):
-        break
-
     if window == window1:
+        if event in (sg.WIN_CLOSED, 'Exit'):
+            break
+
         if event == 'Next >':
             window1.hide()
             window2 = make_window2()

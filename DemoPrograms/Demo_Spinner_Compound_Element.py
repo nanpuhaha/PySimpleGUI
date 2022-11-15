@@ -22,10 +22,11 @@ window = sg.Window('Spinner simulation', layout, use_default_focus=False)
 while True:
     event, values = window.read()
 
-    if event == 'Ok' or event == sg.WIN_CLOSED:    # be nice to your user, always have an exit from your form
+    if event in ['Ok', sg.WIN_CLOSED]:    # be nice to your user, always have an exit from your form
         break
-    counter = int(values['-SPIN-'])
-    # --- do spinner stuff --- #
-    counter += 1 if event == '-UP-' else -1 if event == '-DOWN-' else 0
+    counter = int(values['-SPIN-']) + (
+        1 if event == '-UP-' else -1 if event == '-DOWN-' else 0
+    )
+
     window['-SPIN-'].update(counter)
 window.close()

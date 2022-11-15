@@ -51,10 +51,7 @@ def popup_get_date(start_mon=None, start_day=None, start_year=None, begin_at_sun
     now = datetime.datetime.now()
     cur_month, cur_day, cur_year = now.month, now.day, now.year
     cur_month = start_mon or cur_month
-    if start_mon is not None:
-        cur_day = start_day
-    else:
-        cur_day = cur_day
+    cur_day = start_day if start_mon is not None else cur_day
     cur_year = start_year or cur_year
 
 

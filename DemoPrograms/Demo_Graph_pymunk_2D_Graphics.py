@@ -48,7 +48,7 @@ class Playfield():
 
     def add_balls(self):
         self.arena_balls = []
-        for i in range(1, 200):
+        for _ in range(1, 200):
             x = random.randint(0, 600)
             y = random.randint(0, 400)
             r = random.randint(1, 10)
@@ -68,10 +68,12 @@ def main():
                           enable_events=True, key='-GRAPH-', background_color='lightblue')
 
     hostname = socket.gethostbyname(socket.gethostname())
-    layout = [[sg.Text('Ball Test'), sg.Text('My IP '+hostname)],
-              [graph_elem],
-              # [sg.Up(), sg.Down()],
-              [sg.Button('Kick'), sg.Button('Exit')]]
+    layout = [
+        [sg.Text('Ball Test'), sg.Text(f'My IP {hostname}')],
+        [graph_elem],
+        [sg.Button('Kick'), sg.Button('Exit')],
+    ]
+
 
     window = sg.Window('Window Title', layout, finalize=True)
 

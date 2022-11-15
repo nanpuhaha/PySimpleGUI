@@ -67,7 +67,7 @@ def get_img_data(f, maxsize=(1200, 850), first=False):
 filename = os.path.join(folder, fnames[0])  # name of first file in list
 image_elem = sg.Image(data=get_img_data(filename, first=True))
 filename_display_elem = sg.Text(filename, size=(80, 3))
-file_num_display_elem = sg.Text('File 1 of {}'.format(num_files), size=(15, 1))
+file_num_display_elem = sg.Text(f'File 1 of {num_files}', size=(15, 1))
 
 # define layout, show and read the form
 col = [[filename_display_elem],
@@ -112,6 +112,6 @@ while True:
     # update window with filename
     filename_display_elem.update(filename)
     # update page display
-    file_num_display_elem.update('File {} of {}'.format(i+1, num_files))
+    file_num_display_elem.update(f'File {i + 1} of {num_files}')
 
 window.close()

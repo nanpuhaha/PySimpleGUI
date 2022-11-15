@@ -50,9 +50,22 @@ def create_window():
             colors.append(sg.theme_button_color()[1])
         colors = list(set(colors))      # de-duplicate items
         row = [sg.T(sg.theme(), background_color='black', text_color='white',  size=(20,1), justification='r')]
-        for color in colors:
-            if color != sg.COLOR_SYSTEM_DEFAULT:
-                row.append(sg.T(sg.SYMBOL_SQUARE, text_color=color, background_color='black', pad=(0,0), font='DEFAUlT 20', right_click_menu=['Nothing',[color]], tooltip=color, enable_events=True, key=(i,color)))
+        row.extend(
+            sg.T(
+                sg.SYMBOL_SQUARE,
+                text_color=color,
+                background_color='black',
+                pad=(0, 0),
+                font='DEFAUlT 20',
+                right_click_menu=['Nothing', [color]],
+                tooltip=color,
+                enable_events=True,
+                key=(i, color),
+            )
+            for color in colors
+            if color != sg.COLOR_SYSTEM_DEFAULT
+        )
+
         layout += [row]
     # finish the layout by adding an exit button
     layout += [[sg.B('Exit')]]
@@ -71,19 +84,15 @@ def main():
         window.size = (window.size[0], 1000)
     window.move(window.get_screen_size()[0]//2-window.size[0]//2, window.get_screen_size()[1]//2-500)
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         event, values = window.read()
         print(event, values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if isinstance(event, tuple):       # someone clicked a swatch
             chosen_color = event[1]
         else:
-            if event[0] == '#':  # someone right clicked
-                chosen_color = event
-            else:
-                chosen_color = ''
-
+            chosen_color = event if event[0] == '#' else ''
         if pyperclip_available:
             pyperclip.copy(chosen_color)
             sg.popup_auto_close(f'{chosen_color}\nColor copied to clipboard', auto_close_duration=1)

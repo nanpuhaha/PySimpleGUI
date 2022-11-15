@@ -120,11 +120,7 @@ def make_github_link(title, body):
 #########################################################################################################
 
 def validate(values, checklist, issue_types):
-    issue_type = None
-    for itype in issue_types:
-        if values[itype]:
-            issue_type = itype
-            break
+    issue_type = next((itype for itype in issue_types if values[itype]), None)
     if issue_type is None:
         sg.popup_error('Must choose issue type')
         return False
@@ -148,7 +144,7 @@ def validate(values, checklist, issue_types):
         sg.popup_error('Must fill in an OS Version')
         return False
 
-    checkboxes = any([ values[('-CB-', i)] for i in range(len(checklist))])
+    checkboxes = any(values[('-CB-', i)] for i in range(len(checklist)))
     if not checkboxes:
         sg.popup_error('None of the checkboxes were checked.... you need to have tried something...anything...')
         return False
@@ -157,7 +153,7 @@ def validate(values, checklist, issue_types):
     if len(title) == 0:
         sg.popup_error("Title can't be blank")
         return False
-    elif title[1:len(title)-1] == issue_type:
+    elif title[1:-1] == issue_type:
         sg.popup_error("Title can't be blank (only the type of issue isn't enough)")
         return False
 
@@ -279,24 +275,69 @@ def main_open_github_issue():
                   ('Searched through Issues (open and closed) to see if already reported', 'http://Issues.PySimpleGUI.org'),
                   ('Tried using the PySimpleGUI.py file on GitHub. Your problem may have already been fixed vut not released.', ''))
 
-    frame_checklist = [[sg.CB(c, k=('-CB-', i)), sg.T(t, k='-T{}-'.format(i), enable_events=True)] for i, (c, t) in enumerate(checklist)]
+    frame_checklist = [
+        [sg.CB(c, k=('-CB-', i)), sg.T(t, k=f'-T{i}-', enable_events=True)]
+        for i, (c, t) in enumerate(checklist)
+    ]
+
 
     frame_details = [[sg.Multiline(size=(65,10), font='Courier 10', k='-ML DETAILS-')]]
     frame_code = [[sg.Multiline(size=(80,10), font='Courier 8',  k='-ML CODE-')]]
     frame_markdown = [[sg.Multiline(size=(80,10), font='Courier 8',  k='-ML MARKDOWN-')]]
 
-    top_layout = [  [sg.Col([[sg.Text('Open A GitHub Issue (* = Required Info)', font='_ 15')]], expand_x=True),
-                     sg.Col([[sg.B('Help')]])],
-                [sg.Frame('Title *', [[sg.Input(k='-TITLE-', size=(50,1), font='_ 14', focus=True)]], font=font_frame)],
-                sg.vtop([
-                            sg.Frame('Platform *',frame_platforms, font=font_frame),
-                            sg.Frame('Type of Issue *',frame_type, font=font_frame),
-                            sg.Frame('Versions *',frame_versions, font=font_frame),
-                            sg.Frame('Experience',frame_experience, font=font_frame),
-                    ]),
-                [sg.Frame('Checklist * (note that you can click the links)',frame_checklist, font=font_frame)],
-                [sg.HorizontalSeparator()],
-                [sg.T(sg.SYMBOL_DOWN + ' If you need more room for details grab the dot and drag to expand', background_color='red', text_color='white')]]
+    top_layout = [
+        [
+            sg.Col(
+                [
+                    [
+                        sg.Text(
+                            'Open A GitHub Issue (* = Required Info)',
+                            font='_ 15',
+                        )
+                    ]
+                ],
+                expand_x=True,
+            ),
+            sg.Col([[sg.B('Help')]]),
+        ],
+        [
+            sg.Frame(
+                'Title *',
+                [
+                    [
+                        sg.Input(
+                            k='-TITLE-', size=(50, 1), font='_ 14', focus=True
+                        )
+                    ]
+                ],
+                font=font_frame,
+            )
+        ],
+        sg.vtop(
+            [
+                sg.Frame('Platform *', frame_platforms, font=font_frame),
+                sg.Frame('Type of Issue *', frame_type, font=font_frame),
+                sg.Frame('Versions *', frame_versions, font=font_frame),
+                sg.Frame('Experience', frame_experience, font=font_frame),
+            ]
+        ),
+        [
+            sg.Frame(
+                'Checklist * (note that you can click the links)',
+                frame_checklist,
+                font=font_frame,
+            )
+        ],
+        [sg.HorizontalSeparator()],
+        [
+            sg.T(
+                f'{sg.SYMBOL_DOWN} If you need more room for details grab the dot and drag to expand',
+                background_color='red',
+                text_color='white',
+            )
+        ],
+    ]
+
 
     bottom_layout = [
                 [sg.TabGroup([[sg.Tab('Details', frame_details), sg.Tab('Code', frame_code), sg.Tab('Markdown', frame_markdown)]], k='-TABGROUP-')],
@@ -309,7 +350,7 @@ def main_open_github_issue():
 
     window = sg.Window('Open A GitHub Issue', layout, finalize=True, resizable=True, enable_close_attempted_event=False)
     for i in range(len(checklist)):
-        window['-T{}-'.format(i)].set_cursor('hand1')
+        window[f'-T{i}-'].set_cursor('hand1')
     window['-TABGROUP-'].expand(True, True, True)
     window['-ML CODE-'].expand(True, True, True)
     window['-ML DETAILS-'].expand(True, True, True)
@@ -317,34 +358,34 @@ def main_open_github_issue():
     # window['-FRAME CODE-'].expand(True, True, True)
     # window['-FRAME DETAILS-'].expand(True, True, True)
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         event, values = window.read()
         # print(event, values)
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, 'Quit'):
-            if sg.popup_yes_no( 'Do you really want to exit?',
-                                'If you have not clicked Post Issue button and then clicked "Submit New Issue" button '
-                                'then your issue will not have been submitted to GitHub.'
-                                'Do no exit until you have PASTED the information from Markdown tab into an issue?') == 'Yes':
-                break
+        if (
+            event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, 'Quit')
+            and sg.popup_yes_no(
+                'Do you really want to exit?',
+                'If you have not clicked Post Issue button and then clicked "Submit New Issue" button '
+                'then your issue will not have been submitted to GitHub.'
+                'Do no exit until you have PASTED the information from Markdown tab into an issue?',
+            )
+            == 'Yes'
+        ):
+            break
         if event == sg.WIN_CLOSED:
             break
-        if event in ['-T{}-'.format(i) for i in range(len(checklist))]:
+        if event in [f'-T{i}-' for i in range(len(checklist))]:
             webbrowser.open_new_tab(window[event].get())
         if event in issue_types:
             title = str(values['-TITLE-'])
-            if len(title) != 0:
-                if title[0] == '[' and title.find(']'):
-                    title = title[title.find(']')+1:]
-                    title = title.strip()
-            window['-TITLE-'].update('[{}] {}'.format(event, title))
+            if title != "" and title[0] == '[' and title.find(']'):
+                title = title[title.find(']')+1:]
+                title = title.strip()
+            window['-TITLE-'].update(f'[{event}] {title}')
         if event == 'Help':
             _github_issue_help()
         elif event in ('Post Issue', 'Create Markdown Only'):
-            issue_type = None
-            for itype in issue_types:
-                if values[itype]:
-                    issue_type = itype
-                    break
+            issue_type = next((itype for itype in issue_types if values[itype]), None)
             if issue_type is None:
                 sg.popup_error('Must choose issue type')
                 continue

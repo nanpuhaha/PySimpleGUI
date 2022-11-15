@@ -21,8 +21,36 @@ import PySimpleGUI as sg
     Copyright 2021 PySimpleGUI
 """
 
-col2 = sg.Column([[sg.Frame('Accounts:', [[sg.Column([[sg.Listbox(['Account '+str(i) for i in range(1,16)],
-                                                      key='-ACCT-LIST-',size=(15,20)),]],size=(150,400))]])]],pad=(0,0))
+col2 = sg.Column(
+    [
+        [
+            sg.Frame(
+                'Accounts:',
+                [
+                    [
+                        sg.Column(
+                            [
+                                [
+                                    sg.Listbox(
+                                        [
+                                            f'Account {str(i)}'
+                                            for i in range(1, 16)
+                                        ],
+                                        key='-ACCT-LIST-',
+                                        size=(15, 20),
+                                    )
+                                ]
+                            ],
+                            size=(150, 400),
+                        )
+                    ]
+                ],
+            )
+        ]
+    ],
+    pad=(0, 0),
+)
+
 
 col1 = sg.Column([
     # Categories sg.Frame

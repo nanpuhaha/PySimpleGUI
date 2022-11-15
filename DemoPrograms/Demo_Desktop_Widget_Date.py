@@ -157,7 +157,12 @@ def main(location):
             sg.user_settings_set_entry('-show refresh-', True)
         elif event == 'Save Location':
             sg.user_settings_set_entry('-location-', window.current_location())
-            sg.popup_notify(f'Saved your current window location:', window.current_location(), title='Saved Location')
+            sg.popup_notify(
+                'Saved your current window location:',
+                window.current_location(),
+                title='Saved Location',
+            )
+
         elif event == 'Hide Refresh Info':
             window['-REFRESHED-'].update(visible=False)
             sg.user_settings_set_entry('-show refresh-', False)
@@ -180,8 +185,11 @@ def main(location):
                 window.close()  # out with the old...
                 window = make_window(loc)  # in with the new
         elif event == 'Font':
-            font = sg.popup_get_text('Enter font string using PySimpleGUI font format (e.g. courier 70 or courier 70 bold)', default_text=sg.user_settings_get_entry('-main info font-'), keep_on_top=True)
-            if font:
+            if font := sg.popup_get_text(
+                'Enter font string using PySimpleGUI font format (e.g. courier 70 or courier 70 bold)',
+                default_text=sg.user_settings_get_entry('-main info font-'),
+                keep_on_top=True,
+            ):
                 sg.user_settings_set_entry('-main info font-', font)
                 loc = window.current_location()
                 _, window = window.close(), make_window(loc)

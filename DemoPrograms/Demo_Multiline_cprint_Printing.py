@@ -23,9 +23,9 @@ def main():
 
     cprint = sg.cprint
 
-    MLINE_KEY = '-ML-'+sg.WRITE_ONLY_KEY        # multiline element's key. Indicate it's an output only element
-    MLINE_KEY2 = '-ML2-'+sg.WRITE_ONLY_KEY        # multiline element's key. Indicate it's an output only element
-    MLINE_KEY3 = '-ML3-'+sg.WRITE_ONLY_KEY        # multiline element's key. Indicate it's an output only element
+    MLINE_KEY = f'-ML-{sg.WRITE_ONLY_KEY}'
+    MLINE_KEY2 = f'-ML2-{sg.WRITE_ONLY_KEY}'
+    MLINE_KEY3 = f'-ML3-{sg.WRITE_ONLY_KEY}'
 
     output_key = MLINE_KEY
 
@@ -43,9 +43,9 @@ def main():
 
     sg.cprint_set_output_destination(window, output_key)
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         event, values = window.read()
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if event == 'Print':
             sg.cprint(values['-IN-'], text_color=values['-TEXT COLOR-'], background_color=values['-BG COLOR-'])

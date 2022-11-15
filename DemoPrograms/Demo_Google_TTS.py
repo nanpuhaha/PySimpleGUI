@@ -28,9 +28,9 @@ while True:
         break
     # Get the text and convert to mp3 file
     tts = gTTS(text=values[0], lang='en',slow=False)
-    tts.save('speech{}.mp3'.format(i%2))
+    tts.save(f'speech{i % 2}.mp3')
     # playback the speech
-    mixer.music.load('speech{}.mp3'.format(i%2))
+    mixer.music.load(f'speech{i % 2}.mp3')
     mixer.music.play()
     # wait for playback to end
     while mixer.music.get_busy():

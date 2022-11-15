@@ -119,7 +119,7 @@ def main():
                 sg.popup_error('Counter must be a valid int')
                 continue
             if new_count is not None:
-                counter = int(new_count)
+                counter = new_count
         elif event == 'Choose Title':
             new_title = sg.popup_get_text('Choose a title for your counter', default_text=sg.user_settings_get_entry('-title-', ''), location=window.current_location(), keep_on_top=True)
             if new_title is not None:
@@ -134,18 +134,30 @@ def main():
                 # this is result of hacking code down to 99 lines in total. Not tried it before. Interesting test.
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Main Font':
-            font = sg.popup_get_text('Main Information Font and Size (e.g. courier 70)', default_text=sg.user_settings_get_entry('-main number font-'), keep_on_top=True, location=window.current_location())
-            if font:
+            if font := sg.popup_get_text(
+                'Main Information Font and Size (e.g. courier 70)',
+                default_text=sg.user_settings_get_entry('-main number font-'),
+                keep_on_top=True,
+                location=window.current_location(),
+            ):
                 sg.user_settings_set_entry('-main number font-', font)
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Button Font':
-            font = sg.popup_get_text('Font for the +/- symbols (e.g. courier 70)', default_text=sg.user_settings_get_entry('-button font-'), keep_on_top=True, location=window.current_location())
-            if font:
+            if font := sg.popup_get_text(
+                'Font for the +/- symbols (e.g. courier 70)',
+                default_text=sg.user_settings_get_entry('-button font-'),
+                keep_on_top=True,
+                location=window.current_location(),
+            ):
                 sg.user_settings_set_entry('-button font-', font)
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Title Font':
-            font = sg.popup_get_text('Title Font and Size (e.g. courier 8)', default_text=sg.user_settings_get_entry('-title font-'), keep_on_top=True, location=window.current_location())
-            if font:
+            if font := sg.popup_get_text(
+                'Title Font and Size (e.g. courier 8)',
+                default_text=sg.user_settings_get_entry('-title font-'),
+                keep_on_top=True,
+                location=window.current_location(),
+            ):
                 sg.user_settings_set_entry('-title font-', font)
                 _, window = window.close(), make_window(loc)
         elif event == '+':

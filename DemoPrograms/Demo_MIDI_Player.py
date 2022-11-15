@@ -144,8 +144,12 @@ def main():
     # ------ Build list of files to play --------------------------------------------------------- #
     if batch_folder:
         filelist = os.listdir(batch_folder)
-        filelist = [batch_folder+'/' +
-                    f for f in filelist if f.endswith(('.mid', '.MID'))]
+        filelist = [
+            f'{batch_folder}/{f}'
+            for f in filelist
+            if f.endswith(('.mid', '.MID'))
+        ]
+
         filetitles = [os.path.basename(f) for f in filelist]
     elif midi_filename:       # an individual filename
         filelist = [midi_filename, ]
@@ -155,9 +159,9 @@ def main():
         return
 
     # ------ LOOP THROUGH MULTIPLE FILES --------------------------------------------------------- #
-    pback.PlayerPlaybackGUIStart(NumFiles=len(filelist) if len(filelist) <= 10 else 10)
+    pback.PlayerPlaybackGUIStart(NumFiles=min(len(filelist), 10))
     port = None
-    
+
     # Loop through the files in the filelist
     for now_playing_number, current_midi_filename in enumerate(filelist):
         display_string = 'Playing Local File...\n{} of {}\n{}'.format(
@@ -170,8 +174,8 @@ def main():
         midi_filename = current_midi_filename
 
         # --------------------------------- MIDI - STARTS HERE ----------------------------------------- #
-        if not port:            # if the midi output port not opened yet, then open it
-            port = mido.open_output(midi_port if midi_port else None)
+        if not port:    # if the midi output port not opened yet, then open it
+            port = mido.open_output(midi_port or None)
 
         try:
             mid = mido.MidiFile(filename=midi_filename)

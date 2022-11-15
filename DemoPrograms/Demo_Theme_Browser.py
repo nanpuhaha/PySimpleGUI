@@ -22,6 +22,9 @@ while True:  # Event Loop
     if event in (sg.WIN_CLOSED, 'Exit'):
         break
     sg.theme(values['-LIST-'][0])
-    sg.popup_get_text('This is {}'.format(values['-LIST-'][0]), default_text=values['-LIST-'][0])
+    sg.popup_get_text(
+        f"This is {values['-LIST-'][0]}", default_text=values['-LIST-'][0]
+    )
+
 
 window.close()

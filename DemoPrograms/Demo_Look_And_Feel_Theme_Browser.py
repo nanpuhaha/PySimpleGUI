@@ -23,6 +23,6 @@ while True:  # Event Loop
     if event in (None, 'Exit'):
         break
     sg.change_look_and_feel(values['-LIST-'][0])
-    sg.popup_get_text('This is {}'.format(values['-LIST-'][0]))
+    sg.popup_get_text(f"This is {values['-LIST-'][0]}")
 
 window.close()

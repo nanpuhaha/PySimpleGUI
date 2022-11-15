@@ -57,9 +57,9 @@ def print_progress_bar(description, iteration_counter, total_items, progress_bar
 def speak(text):
     global i
     tts = gTTS(text=text, lang='en',slow=False)
-    tts.save('speech{}.mp3'.format(i%2))
+    tts.save(f'speech{i % 2}.mp3')
     # playback the speech
-    mixer.music.load('speech{}.mp3'.format(i%2))
+    mixer.music.load(f'speech{i % 2}.mp3')
     mixer.music.play()
     # wait for playback to end
     while mixer.music.get_busy():
@@ -93,7 +93,7 @@ while True:
     if event != 'SEND':
         break
     string = values['-MLINE IN-'].rstrip()
-    print('  ' + string)
+    print(f'  {string}')
     # send the user input to chatbot to get a response
     response = chatbot.get_response(values['-MLINE IN-'].rstrip())
     print(response)

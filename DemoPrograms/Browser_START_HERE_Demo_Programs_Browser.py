@@ -88,9 +88,7 @@ def get_demo_path():
     :return: Path to list of files using the user settings for this file.  Returns folder of this file if not found
     :rtype: str
     """
-    demo_path = sg.user_settings_get_entry('-demos folder-', os.path.dirname(__file__))
-
-    return demo_path
+    return sg.user_settings_get_entry('-demos folder-', os.path.dirname(__file__))
 
 
 def get_global_editor():
@@ -227,15 +225,15 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
     for file in demo_files_dict:
         try:
             full_filename = demo_files_dict[file]
-            if not demo_files_dict == get_file_list_dict():
+            if demo_files_dict != get_file_list_dict():
                 full_filename = full_filename[0]
             matches = None
 
             with open(full_filename, 'rb', 0) as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as s:
-                if (regex):
+                if regex:
                     window['-FIND NUMBER-'].update(f'{num_files} files')
                     window.refresh()
-                    matches = re.finditer(bytes("^.*(" + string + ").*$", 'utf-8'), s, re.MULTILINE)
+                    matches = re.finditer(bytes(f"^.*({string}).*$", 'utf-8'), s, re.MULTILINE)
                     if matches:
                         for match in matches:
                             if match is not None:
@@ -249,22 +247,51 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
                     window['-FIND NUMBER-'].update(f'{num_files} files')
                     window.refresh()
                     matches = None
-                    if (ignore_case):
-                        if (show_first_match):
-                            matches = re.search(br'(?i)^' + bytes(".*("+re.escape(string.lower()) + ").*$", 'utf-8'), s, re.MULTILINE)
-                        else:
-                            matches = re.finditer(br'(?i)^' + bytes(".*("+re.escape(string.lower()) + ").*$", 'utf-8'), s, re.MULTILINE)
+                    if ignore_case:
+                        matches = (
+                            re.search(
+                                br'(?i)^'
+                                + bytes(
+                                    f".*({re.escape(string.lower())}).*$",
+                                    'utf-8',
+                                ),
+                                s,
+                                re.MULTILINE,
+                            )
+                            if show_first_match
+                            else re.finditer(
+                                br'(?i)^'
+                                + bytes(
+                                    f".*({re.escape(string.lower())}).*$",
+                                    'utf-8',
+                                ),
+                                s,
+                                re.MULTILINE,
+                            )
+                        )
+
+                    elif show_first_match:
+                        matches = re.search(
+                            br'^'
+                            + bytes(f".*({re.escape(string)}).*$", 'utf-8'),
+                            s,
+                            re.MULTILINE,
+                        )
+
                     else:
-                        if (show_first_match):
-                            matches = re.search(br'^' + bytes(".*("+re.escape(string) + ").*$", 'utf-8'), s, re.MULTILINE)
-                        else:
-                            matches = re.finditer(br'^' + bytes(".*("+re.escape(string) + ").*$", 'utf-8'), s, re.MULTILINE)
+                        matches = re.finditer(
+                            br'^'
+                            + bytes(f".*({re.escape(string)}).*$", 'utf-8'),
+                            s,
+                            re.MULTILINE,
+                        )
+
                     if matches:
+                        match_array = []
+
                         if show_first_match:
                             file_list.append(file)
                             num_files += 1
-                            match_array = []
-
                             matched_str = matches.group(0).decode('utf-8')
                             if ("==" not in matched_str and "b'" not in matched_str):
                                 # safe to assume this is not a base64 string as it does not contain the proper ending
@@ -273,10 +300,10 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
                         else:
                             # We need to do this because strings are "falsy" in Python, but empty matches still return True...
                             append_file = False
-                            match_array = []
                             for match_ in matches:
-                                match_str = match_.group(0).decode('utf-8')
-                                if match_str:
+                                if match_str := match_.group(0).decode(
+                                    'utf-8'
+                                ):
                                     if len(match_str) < 500 and "==" not in match_str and "b'" not in match_str:
                                         match_array.append(match_str)
                                         if append_file is False:
@@ -286,7 +313,7 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
                                 num_files += 1
                                 matched_dict[full_filename] = match_array
 
-                # del matches
+                            # del matches
         except ValueError:
             del matches
         except Exception as e:
@@ -298,9 +325,9 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
     # Format of the matches dictionary
     # Filename, [num1, num2, num3]
     file_lines_dict = {}
-    list_of_matches = []
     if not regex:
-        for key in matched_dict:
+        list_of_matches = []
+        for key, value in matched_dict.items():
             head, tail = os.path.split(key)
             # Tails. Don't wanna put Washington in places he doesn't want to be.
             file_array_old = [key]
@@ -313,7 +340,7 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
                 sg.cprint(f"{tail}:", c='white on green')
             try:
                 dupe_lines = []
-                for _match in matched_dict[key]:
+                for _match in value:
                     line_num_match = get_line_number(key, _match, dupe_lines)
                     dupe_lines.append(line_num_match)
                     file_array_new.append(line_num_match)
@@ -323,9 +350,7 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
                         sg.cprint(f"{_match.strip()}\n")
                     # Make a list of the matches found in this file to add to the dictionry
                     list_of_matches.append(_match.strip())
-                file_array_old.append(file_array_new)
-                file_array_old.append(file_match_list)
-                
+                file_array_old.extend((file_array_new, file_match_list))
                 if (tail in file_lines_dict):
                     for i in range(1, 100):
                         new_tail = f'{tail}_{i}'
@@ -338,20 +363,16 @@ def find_in_file(string, demo_files_dict, regex=False, verbose=False, window=Non
                 pass
         find_in_file.file_list_dict = file_lines_dict
 
-    file_list = list(set(file_list))
-    return file_list
+    return list(set(file_list))
 
 
 def window_choose_line_to_edit(filename, full_filename,  line_num_list, match_list):
-    # sg.popup('matches previously found for this file:', filename, line_num_list)
-    i = 0
     if len(line_num_list) == 1:
         return full_filename, line_num_list[0]
     layout = [[sg.T(f'Choose line from {filename}', font='_ 14')]]
-    for line in sorted(set(line_num_list)):
+    for i, line in enumerate(sorted(set(line_num_list))):
         match_text = match_list[i]
         layout += [[sg.Text(f'Line {line} : {match_text}', key=('-T-', line), enable_events=True, size=(min(len(match_text), 90), None))]]
-        i += 1
     layout += [[sg.B('Cancel')]]
 
     window = sg.Window('Open Editor', layout)
@@ -472,12 +493,41 @@ def make_window():
         [sg.Text('Find (F3):', tooltip=find_re_tooltip), sg.Input(size=(25, 1),key='-FIND RE-', tooltip=find_re_tooltip),sg.B('Find RE')]], k='-RE COL-'))
 
     right_col = [
-        [sg.Multiline(size=(70, 21), write_only=True, key=ML_KEY, reroute_stdout=True, echo_stdout_stderr=True, reroute_cprint=True)],
-        [sg.Button('Edit Me (this program)'), sg.B('Settings'), sg.Button('Exit')],
-        [sg.T('PySimpleGUI ver ' + sg.version.split(' ')[0] + '  tkinter ver ' + sg.tclversion_detailed, font='Default 8', pad=(0,0))],
-        [sg.T('Python ver ' + sys.version, font='Default 8', pad=(0,0))],
-        [sg.T('Interpreter ' + execute_py_get_interpreter(), font='Default 8', pad=(0,0))],
+        [
+            sg.Multiline(
+                size=(70, 21),
+                write_only=True,
+                key=ML_KEY,
+                reroute_stdout=True,
+                echo_stdout_stderr=True,
+                reroute_cprint=True,
+            )
+        ],
+        [
+            sg.Button('Edit Me (this program)'),
+            sg.B('Settings'),
+            sg.Button('Exit'),
+        ],
+        [
+            sg.T(
+                'PySimpleGUI ver '
+                + sg.version.split(' ')[0]
+                + '  tkinter ver '
+                + sg.tclversion_detailed,
+                font='Default 8',
+                pad=(0, 0),
+            )
+        ],
+        [sg.T(f'Python ver {sys.version}', font='Default 8', pad=(0, 0))],
+        [
+            sg.T(
+                f'Interpreter {execute_py_get_interpreter()}',
+                font='Default 8',
+                pad=(0, 0),
+            )
+        ],
     ]
+
 
     options_at_bottom = sg.pin(sg.Column([[sg.CB('Verbose', enable_events=True, k='-VERBOSE-'),
                          sg.CB('Show only first match in file', default=True, enable_events=True, k='-FIRST MATCH ONLY-'),

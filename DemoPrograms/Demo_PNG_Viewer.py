@@ -19,7 +19,7 @@ def main():
     png_files = [folder + '\\' + f for f in os.listdir(folder) if '.png' in f]
     filenames_only = [f for f in os.listdir(folder) if '.png' in f]
 
-    if len(png_files) == 0:
+    if not png_files:
         sg.popup('No PNG images in folder')
         return
 
@@ -27,10 +27,18 @@ def main():
     menu = [['File', ['Open Folder', 'Exit']], ['Help', ['About', ]]]
 
     # define layout, show and read the window
-    col = [[sg.Text(png_files[0], size=(80, 3), key='filename')],
-           [sg.Image(filename=png_files[0], key='image')],
-           [sg.Button('Next', size=(8, 2)), sg.Button('Prev', size=(8, 2)),
-               sg.Text('File 1 of {}'.format(len(png_files)), size=(15, 1), key='filenum')]]
+    col = [
+        [sg.Text(png_files[0], size=(80, 3), key='filename')],
+        [sg.Image(filename=png_files[0], key='image')],
+        [
+            sg.Button('Next', size=(8, 2)),
+            sg.Button('Prev', size=(8, 2)),
+            sg.Text(
+                f'File 1 of {len(png_files)}', size=(15, 1), key='filenum'
+            ),
+        ],
+    ]
+
 
     col_files = [[sg.Listbox(values=filenames_only, size=(60, 30), key='listbox')],
                  [sg.Button('Read')]]
@@ -56,7 +64,7 @@ def main():
             break
 
         if event == 'Read':
-            filename = folder + '/' + values['listbox'][0]
+            filename = f'{folder}/' + values['listbox'][0]
         else:
             filename = png_files[i]
 
@@ -67,8 +75,7 @@ def main():
                 continue
 
             folder = newfolder
-            png_files = [folder + '/' +
-                         f for f in os.listdir(folder) if '.png' in f]
+            png_files = [f'{folder}/{f}' for f in os.listdir(folder) if '.png' in f]
             filenames_only = [f for f in os.listdir(folder) if '.png' in f]
 
             window['listbox'].update(values=filenames_only)
@@ -84,7 +91,7 @@ def main():
         # update window with filename
         window['filename'].update(filename)
         # update page display
-        window['filenum'].update('File {} of {}'.format(i+1, len(png_files)))
+        window['filenum'].update(f'File {i + 1} of {len(png_files)}')
 
     window.close()
 

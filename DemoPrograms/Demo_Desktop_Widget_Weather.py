@@ -119,14 +119,14 @@ def create_endpoint(endpoint_type=0):
     {0: default, 1: zipcode, 2: city_name}"""
     if endpoint_type == 1:
         try:
-            endpoint = f"http://api.openweathermap.org/data/2.5/weather?zip={APP_DATA['Postal']},us&appid={API_KEY}&units={APP_DATA['Units']}"
-            return endpoint
+            return f"http://api.openweathermap.org/data/2.5/weather?zip={APP_DATA['Postal']},us&appid={API_KEY}&units={APP_DATA['Units']}"
+
         except ConnectionError:
             return
     elif endpoint_type == 2:
         try:
-            endpoint = f"http://api.openweathermap.org/data/2.5/weather?q={APP_DATA['City'].replace(' ', '%20')},us&APPID={API_KEY}&units={APP_DATA['Units']}"
-            return endpoint
+            return f"http://api.openweathermap.org/data/2.5/weather?q={APP_DATA['City'].replace(' ', '%20')},us&APPID={API_KEY}&units={APP_DATA['Units']}"
+
         except ConnectionError:
             return
     else:
@@ -158,12 +158,18 @@ def request_weather_data(endpoint):
         APP_DATA['Pressure'] = "{:,d} hPa".format(weather['main']['pressure'])
         APP_DATA['Feels Like'] = "{:,.0f}°F".format(weather['main']['feels_like'])
         APP_DATA['Wind'] = "{:,.1f} m/h".format(weather['wind']['speed'])
-        APP_DATA['Precip 1hr'] = None if not weather.get('rain') else "{:2} mm".format(weather['rain']['1h'])
+        APP_DATA['Precip 1hr'] = (
+            "{:2} mm".format(weather['rain']['1h'])
+            if weather.get('rain')
+            else None
+        )
+
         APP_DATA['Updated'] = 'Updated: ' + datetime.datetime.now().strftime("%B %d %I:%M:%S %p")
         APP_DATA['Lon'] = weather['coord']['lon']
         APP_DATA['Lat'] = weather['coord']['lat']
 
-        icon_url = "http://openweathermap.org/img/wn/{}@2x.png".format(weather['weather'][0]['icon'])
+        icon_url = f"http://openweathermap.org/img/wn/{weather['weather'][0]['icon']}@2x.png"
+
         APP_DATA['Icon'] = base64.b64encode(request.urlopen(icon_url).read())
 
 

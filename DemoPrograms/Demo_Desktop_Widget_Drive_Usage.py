@@ -18,12 +18,16 @@ BAR_COLORS = ('#23a0a0', '#56d856', '#be45be', '#5681d8', '#d34545', '#BE7C29')
 
 def human_size(bytes, units=(' bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB')):
     """ Returns a human readable string reprentation of bytes"""
-    return str(bytes) + ' ' + units[0] if bytes < 1024 else human_size(bytes >> 10, units[1:])
+    return (
+        f'{str(bytes)} {units[0]}'
+        if bytes < 1024
+        else human_size(bytes >> 10, units[1:])
+    )
 
 
 def update_window(window):
     particians = psutil.disk_partitions()
-    for count, part in enumerate(particians):
+    for part in particians:
         mount = part[0]
         try:
             usage = psutil.disk_usage(mount)

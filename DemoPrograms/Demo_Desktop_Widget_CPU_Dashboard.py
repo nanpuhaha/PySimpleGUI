@@ -71,7 +71,13 @@ def main(location):
     # add on the graphs
     for rows in range(num_cores//NUM_COLS+1):
         # for cols in range(min(num_cores-rows*NUM_COLS, NUM_COLS)):
-        layout += [[GraphColumn('CPU '+str(rows*NUM_COLS+cols), (rows, cols)) for cols in range(min(num_cores-rows*NUM_COLS, NUM_COLS))]]
+        layout += [
+            [
+                GraphColumn(f'CPU {str(rows * NUM_COLS + cols)}', (rows, cols))
+                for cols in range(min(num_cores - rows * NUM_COLS, NUM_COLS))
+            ]
+        ]
+
 
     # ----------------  Create Window  ----------------
     window = sg.Window('CPU Cores Usage Widget', layout,

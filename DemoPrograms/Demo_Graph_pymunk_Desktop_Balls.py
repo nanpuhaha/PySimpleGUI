@@ -38,7 +38,7 @@ class Playfield():
         self.space.add(ground_shape)
 
     def add_balls(self, num_balls = 30):
-        for i in range(1, num_balls):
+        for _ in range(1, num_balls):
             x = random.randint(0, self.screensize[0])
             y = random.randint(0, self.screensize[1])
             r = random.randint(5, 10)
@@ -82,7 +82,7 @@ def main():
         elif event == 'Back':
             window1.send_to_back()
         elif event == 'Transparent':
-            window1.set_transparent_color('lightblue' if not transparent else 'black')
+            window1.set_transparent_color('black' if transparent else 'lightblue')
             transparent = not transparent
         elif event == 'Controls':
             window2.bring_to_front()

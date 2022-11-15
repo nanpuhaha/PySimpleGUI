@@ -20,7 +20,7 @@ while True:
         print(event, "exiting")
         break
     if len(event) == 1:
-        text_elem.update(value='%s - %s' % (event, ord(event)))
+        text_elem.update(value=f'{event} - {ord(event)}')
     if event is not None:
         text_elem.update(event)
 

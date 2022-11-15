@@ -29,8 +29,7 @@ for row in range(16):
         else:
             g.draw_rectangle((col * BOX_SIZE + 5, row * BOX_SIZE + 3), (col * BOX_SIZE + BOX_SIZE + 5, row * BOX_SIZE + BOX_SIZE + 3), line_color='black', fill_color='black')
 
-        g.draw_text('{}'.format(row * 6 + col + 1),
-                    (col * BOX_SIZE + 10, row * BOX_SIZE + 8))
+        g.draw_text(f'{row * 6 + col + 1}', (col * BOX_SIZE + 10, row * BOX_SIZE + 8))
 
 while True:             # Event Loop
     event, values = window.read()
@@ -46,7 +45,11 @@ while True:             # Event Loop
         box_y = mouse[1]//BOX_SIZE
         letter_location = (box_x * BOX_SIZE + 18, box_y * BOX_SIZE + 17)
         print(box_x, box_y)
-        g.draw_text('{}'.format(random.choice(string.ascii_uppercase)),
-                    letter_location, font='Courier 25')
+        g.draw_text(
+            f'{random.choice(string.ascii_uppercase)}',
+            letter_location,
+            font='Courier 25',
+        )
+
 
 window.close()

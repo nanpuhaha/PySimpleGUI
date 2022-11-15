@@ -35,7 +35,13 @@ for count, theme in enumerate(names):
     if not count % FRAMES_PER_ROW:
         layout += [row]
         row = []
-    row += [sg.Frame(theme, sample_layout() if not web else [[sg.T(theme)]] + sample_layout())]
+    row += [
+        sg.Frame(
+            theme,
+            [[sg.T(theme)]] + sample_layout() if web else sample_layout(),
+        )
+    ]
+
 if row:
     layout += [row]
 

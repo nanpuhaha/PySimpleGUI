@@ -93,7 +93,7 @@ while True:
     if event != 'SEND':
         break
     string = values['-MLINE IN-'].rstrip()
-    print('  ' + string)
+    print(f'  {string}')
     # send the user input to chatbot to get a response
     response = chatbot.get_response(values['-MLINE IN-'].rstrip())
     print(response)
