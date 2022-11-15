@@ -27,7 +27,7 @@ UPDATE_FREQUENCY_MILLISECONDS = 2 * 1000
 
 
 class Gauge():
-    def mapping(func, sequence, *argc):
+    def mapping(self, sequence, *argc):
         """
         Map function with extra argument, not for tuple.
         : Parameters
@@ -38,11 +38,11 @@ class Gauge():
           list of func(element of sequence, *argc)
         """
         if isinstance(sequence, list):
-            return list(map(lambda i: func(i, *argc), sequence))
+            return list(map(lambda i: self(i, *argc), sequence))
         else:
-            return func(sequence, *argc)
+            return self(sequence, *argc)
 
-    def add(number1, number2):
+    def add(self, number2):
         """
         Add two number
         : Parameter
@@ -51,9 +51,9 @@ class Gauge():
         : Return
           Addition result for number1 and number2.
         """
-        return number1 + number1
+        return self + self
 
-    def limit(number):
+    def limit(self):
         """
         Limit angle in range 0 ~ 360
         : Parameter
@@ -61,7 +61,7 @@ class Gauge():
         : Return
           angel degree in 0 ~ 360, return 0 if number < 0, 360 if number > 360.
         """
-        return max(min(360, number), 0)
+        return max(min(360, self), 0)
     class Clock():
         """
         Draw background circle or arc
@@ -263,7 +263,11 @@ class Gauge():
 
 def human_size(bytes, units=(' bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB')):
     """ Returns a human readable string reprentation of bytes"""
-    return str(bytes) + ' ' + units[0] if bytes < 1024 else human_size(bytes >> 10, units[1:])
+    return (
+        f'{str(bytes)} {units[0]}'
+        if bytes < 1024
+        else human_size(bytes >> 10, units[1:])
+    )
 
 def main(location):
     sg.theme(THEME)
@@ -298,7 +302,7 @@ def main(location):
 
         # update the window, wait for a while, then check for exit
         event, values = window.read(timeout=UPDATE_FREQUENCY_MILLISECONDS)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if event == 'Edit Me':
             sg.execute_editor(__file__)

@@ -17,7 +17,7 @@ names = ['Roberta', 'Kylie', 'Jenny', 'Helen',
 name = ''
 for l in names:
     name = name + l + '\n'
-    
+
 sorted_names = ['Andrea','Belinda','Deborah','Helen',
                'Jenny','Kylie','Meredith','Pauline',
             'Roberta','Wendy']
@@ -25,7 +25,7 @@ sorted_names = ['Andrea','Belinda','Deborah','Helen',
 sortname = ''
 for l in sorted_names:
     sortname = sortname + l +'\n'
-    
+
 layout =[[sg.Text('Search Demo', font =('Calibri', 18, 'bold'))],
 [sg.Text(name,size = (14, 11),relief=sg.RELIEF_SOLID,font = ('Calibri', 12), background_color ='White',key = '_display1_'),
  sg.Text(sortname,size = (14, 11),relief=sg.RELIEF_SOLID,font = ('Calibri', 12), background_color ='White',key = '_display2_')],
@@ -69,11 +69,10 @@ def binary_search():
 while True:
     button, value = window.Read() 
 
-    if button is not None:  
-        if button == 'Linear Search':
-            linear_search()
-        if button == 'Binary Search':
-            binary_search()
-    else:
-        break  
+    if button is None:
+        break
+    if button == 'Linear Search':
+        linear_search()
+    if button == 'Binary Search':
+        binary_search()  
 

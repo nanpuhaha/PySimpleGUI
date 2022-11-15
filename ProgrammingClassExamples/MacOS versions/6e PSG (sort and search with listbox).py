@@ -35,7 +35,7 @@ def display_list(list):
     #store list in Multiline text globally
     list_displayed = list
     #add list elements with new line
-    values = [l for l in list]          
+    values = list(list)
     window.FindElement('_display_').Update(values)
         
 #use inbuilt python sort       
@@ -84,10 +84,10 @@ def linear_search():
     l = names[:]
     found = False
     for l in l:
-        if l == value['_linear_']:          
+        if l == value['_linear_']:  
             found = True
             #Create list for display
-            result = ['Linear search', l + ' found']
+            result = ['Linear search', f'{l} found']
             window.FindElement('_display_').Update(result)
             break
     if not found:
@@ -97,22 +97,22 @@ def linear_search():
 
 #Binary Search     
 def binary_search():
-    l = list_displayed[:]                           
+    l = list_displayed[:]
     lo = 0
     hi = len(l)-1
-    found = False                 
+    found = False
     while lo <= hi:
-        mid = (lo + hi) //2     
+        mid = (lo + hi) //2
         if l[mid] == value['_binary_']:
             #Create list for display
-            result = ['Binary search', l[mid] + ' found.']
+            result = ['Binary search', f'{l[mid]} found.']
             window.FindElement('_display_').Update(result)
-            found = True           
-            break                  
+            found = True
+            break
         elif l[mid] < value['_binary_']:
-            lo = mid + 1           
+            lo = mid + 1
         else:
-            hi = mid - 1           
+            hi = mid - 1
     if not found:
         #Create list for display
         result = [value['_binary_'], 'was not found']
@@ -120,18 +120,17 @@ def binary_search():
      
 while True:
     button, value = window.Read()
-    if button is not None:  
-        if button == 'Original list':
-            display_list(names)
-        if button == 'Default sort':
-            default(names)
-        if button == 'Sort: selection':
-            sel_sort(names)
-        if button == 'Sort: quick':
-            qsort_holder(names)
-        if button == 'Linear Search':
-            linear_search()
-        if button == 'Binary Search':
-            binary_search()
-    else:
-        break  
+    if button is None:
+        break
+    if button == 'Original list':
+        display_list(names)
+    if button == 'Default sort':
+        default(names)
+    if button == 'Sort: selection':
+        sel_sort(names)
+    if button == 'Sort: quick':
+        qsort_holder(names)
+    if button == 'Linear Search':
+        linear_search()
+    if button == 'Binary Search':
+        binary_search()  

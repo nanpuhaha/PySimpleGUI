@@ -679,8 +679,23 @@ def popup_color_chooser(look_and_feel=None):
     num_colors = len(list(color_map.keys()))
     row_len = 40
 
-    grid = [[ColorButton(list(color_map.items())[c + j * row_len]) for c in range(0, row_len)] for j in range(0, num_colors // row_len)]
-    grid += [[ColorButton(list(color_map.items())[c + num_colors - num_colors % row_len]) for c in range(0, num_colors % row_len)]]
+    grid = [
+        [
+            ColorButton(list(color_map.items())[c + j * row_len])
+            for c in range(row_len)
+        ]
+        for j in range(num_colors // row_len)
+    ]
+
+    grid += [
+        [
+            ColorButton(
+                list(color_map.items())[c + num_colors - num_colors % row_len]
+            )
+            for c in range(num_colors % row_len)
+        ]
+    ]
+
 
     layout = [[sg.Text('Pick a color', font='Def 18')]] + grid + \
              [[sg.Button('OK'), sg.T(size=(30, 1), key='-OUT-')]]

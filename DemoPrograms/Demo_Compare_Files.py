@@ -38,8 +38,13 @@ def main():
 
         for i, x in enumerate(a):
             if x != b[i]:
-                sg.popup('Compare results for files', f1, f2,
-                         '**** Mismatch at offset {} ****'.format(i))
+                sg.popup(
+                    'Compare results for files',
+                    f1,
+                    f2,
+                    f'**** Mismatch at offset {i} ****',
+                )
+
                 break
         else:
             if len(a) == len(b):

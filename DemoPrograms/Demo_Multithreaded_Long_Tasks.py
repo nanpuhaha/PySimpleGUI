@@ -31,7 +31,7 @@ def long_operation_thread(seconds, window):
     :param gui_queue: (queue.Queue) Queue to communicate back to GUI that task is completed
     :return:
     """
-    print('Starting thread - will sleep for {} seconds'.format(seconds))
+    print(f'Starting thread - will sleep for {seconds} seconds')
     time.sleep(seconds)                  # sleep for a while
     window.write_event_value('-THREAD-', '** DONE **')  # put a message into queue for GUI
 
@@ -60,7 +60,7 @@ def the_gui():
             break
         elif event.startswith('Do'):
             seconds = int(values['-SECONDS-'])
-            print('Thread ALIVE! Long work....sending value of {} seconds'.format(seconds))
+            print(f'Thread ALIVE! Long work....sending value of {seconds} seconds')
             threading.Thread(target=long_operation_thread, args=(seconds, window,), daemon=True).start()
         elif event == 'Click Me':
             print('Your GUI is alive and well')

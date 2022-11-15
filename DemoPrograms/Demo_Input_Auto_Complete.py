@@ -50,7 +50,6 @@ def main():
         # print(event, values)
         if event == sg.WINDOW_CLOSED:
             break
-        # pressing down arrow will trigger event -IN- then aftewards event Down:40
         elif event.startswith('Escape'):
             window['-IN-'].update('')
             window['-BOX-CONTAINER-'].update(visible=False)
@@ -65,7 +64,7 @@ def main():
                 window['-IN-'].update(value=values['-BOX-'])
                 window['-BOX-CONTAINER-'].update(visible=False)
         elif event == '-IN-':
-            text = values['-IN-'] if not values['-IGNORE CASE-'] else values['-IN-'].lower()
+            text = values['-IN-'].lower() if values['-IGNORE CASE-'] else values['-IN-']
             if text == input_text:
                 continue
             else:
@@ -81,7 +80,7 @@ def main():
             sel_item = 0
             list_element.update(set_to_index=sel_item)
 
-            if len(prediction_list) > 0:
+            if prediction_list:
                 window['-BOX-CONTAINER-'].update(visible=True)
             else:
                 window['-BOX-CONTAINER-'].update(visible=False)

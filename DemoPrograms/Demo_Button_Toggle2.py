@@ -73,7 +73,7 @@ def main():
 
     window = sg.Window('Window Title', layout, font='_ 14', finalize=True)
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         event, values = window.read()
         if event in (sg.WIN_CLOSED, 'Exit'):
             break
@@ -93,11 +93,10 @@ def main():
                     window['-TOGGLE1-'].update(disabled=sg.BUTTON_DISABLED_MEANS_IGNORE, image_data=on_image_disabled)
                 elif window['-TOGGLE1-'].metadata.state is False:
                     window['-TOGGLE1-'].update(disabled=sg.BUTTON_DISABLED_MEANS_IGNORE, image_data=off_image_disabled)
-            else:
-                if window['-TOGGLE1-'].metadata.state is True:
-                    window['-TOGGLE1-'].update(disabled=False, image_data=on_image)
-                elif window['-TOGGLE1-'].metadata.state is False:
-                    window['-TOGGLE1-'].update(disabled=False, image_data=off_image)
+            elif window['-TOGGLE1-'].metadata.state is True:
+                window['-TOGGLE1-'].update(disabled=False, image_data=on_image)
+            elif window['-TOGGLE1-'].metadata.state is False:
+                window['-TOGGLE1-'].update(disabled=False, image_data=off_image)
         window['-STATUS-'].update(f'event {event} button state = {window[event].metadata.state if window[event].metadata is not None else "Not applicable"}')
     window.close()
 

@@ -14,20 +14,20 @@ if sys.platform == 'win32':
         current_value = 0
 
         @classmethod
-        def setmode(self, mode):
+        def setmode(cls, mode):
             return
 
         @classmethod
-        def setup(self, arg1, arg2):
+        def setup(cls, arg1, arg2):
             return
 
         @classmethod
-        def output(self, port, value):
-            self.current_value = value
+        def output(cls, port, value):
+            cls.current_value = value
 
         @classmethod
-        def input(self, port):
-            return self.current_value
+        def input(cls, port):
+            return cls.current_value
 else:
     import RPi.GPIO as GPIO
 
@@ -47,7 +47,7 @@ def SwitchLED():
 
 
 def FlashLED():
-    for i in range(5):
+    for _ in range(5):
         GPIO.output(14, GPIO.HIGH)
         time.sleep(0.5)
         GPIO.output(14, GPIO.LOW)

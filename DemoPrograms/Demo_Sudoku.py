@@ -25,8 +25,8 @@ def generate_sudoku(mask_rate):
     :type mask_rate: float
     :rtype: List[numpy.ndarry, numpy.ndarry]
     """
+    n = 9
     while True:
-        n = 9
         solution = np.zeros((n, n), np.int)
         rg = np.arange(1, n + 1)
         solution[0, :] = np.random.choice(rg, n, replace=False)
@@ -65,8 +65,7 @@ def check_progress(window, solution):
     solved = True
     for r, row in enumerate(solution):
         for c, col in enumerate(row):
-            value = window[r,c].get()
-            if value:
+            if value := window[r, c].get():
                 try:
                     value = int(value)
                 except:
@@ -93,7 +92,11 @@ def create_and_show_puzzle(window):
     puzzle, solution = generate_sudoku(mask_rate=rate)
     for r, row in enumerate(puzzle):
         for c, col in enumerate(row):
-            window[r, c].update(puzzle[r][c] if puzzle[r][c] else '', background_color=sg.theme_input_background_color())
+            window[r, c].update(
+                puzzle[r][c] or '',
+                background_color=sg.theme_input_background_color(),
+            )
+
     return puzzle, solution
 
 
@@ -121,7 +124,7 @@ def main(mask_rate=0.7):
 
     puzzle, solution = create_and_show_puzzle(window)
     check_showing = False
-    while True:         # The Event Loop
+    while True:     # The Event Loop
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             break
@@ -132,8 +135,7 @@ def main(mask_rate=0.7):
                     window[r, c].update(solution[r][c], background_color=sg.theme_input_background_color())
         elif event == 'Check':
             check_showing = True
-            solved = check_progress(window, solution)
-            if solved:
+            if solved := check_progress(window, solution):
                 sg.popup('Solved! You have solved the puzzle correctly.')
         elif event == 'Hint':
             elem = window.find_element_with_focus()

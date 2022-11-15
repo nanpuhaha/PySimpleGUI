@@ -21,7 +21,7 @@ def table_example():
             try:
                 data = list(reader)  # read everything else into a list of rows
                 if button == 'No':
-                    header_list = ['column' + str(x) for x in range(len(data[0]))]
+                    header_list = [f'column{str(x)}' for x in range(len(data[0]))]
             except:
                 sg.popup_error('Error reading file')
                 return

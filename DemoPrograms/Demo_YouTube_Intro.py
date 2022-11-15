@@ -8,4 +8,4 @@ window = sg.Window('Title of Window', layout)
 event, values = window.read()
 window.close()
 
-sg.popup('Hello {}'.format(values[0]))
+sg.popup(f'Hello {values[0]}')

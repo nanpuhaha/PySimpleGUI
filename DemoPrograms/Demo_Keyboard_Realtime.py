@@ -15,7 +15,7 @@ while True:
         break
     if event is not sg.TIMEOUT_KEY:
         if len(event) == 1:
-            print('%s - %s' % (event, ord(event)))
+            print(f'{event} - {ord(event)}')
         else:
             print(event)
     elif event == sg.WIN_CLOSED:

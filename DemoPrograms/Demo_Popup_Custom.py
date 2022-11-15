@@ -25,5 +25,5 @@ def PopupDropDown(title, text, values):
 
 # -----------------------  Calling your PopupDropDown function -----------------------
 
-values = ['choice {}'.format(x) for x in range(30)]
+values = [f'choice {x}' for x in range(30)]
 print(PopupDropDown('My Title', 'Please make a selection', values))

@@ -8,6 +8,7 @@
     Copyright 2021 PySimpleGUI
 """
 
+
 import PySimpleGUI as sg
 
 sg.set_options(font='_ 18')
@@ -36,5 +37,8 @@ while True:             # Event Loop
         window2['-T-'].update('{:02d}:{:02d}.{:02d}'.format((i // 100) // 60, (i // 100) % 60, i % 100))
     if event == '-B-':
         paused[0 if window == window1 else 1] = not paused[0 if window == window1 else 1]
-        window['-B-'].update('Run' if not paused[0 if window == window1 else 1] else 'Pause')
+        window['-B-'].update(
+            'Pause' if paused[0 if window == window1 else 1] else 'Run'
+        )
+
     i += 1

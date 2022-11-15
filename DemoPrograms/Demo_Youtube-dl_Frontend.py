@@ -39,7 +39,7 @@ def DownloadSubtitlesGUI():
         if event == 'Get List':
             print('Getting list of subtitles....')
             window.refresh()
-            command = [youtube_executable + f' --list-subs {link}']
+            command = [f'{youtube_executable} --list-subs {link}']
             output = ExecuteCommandSubprocess(command, wait=True, quiet=True)
             lang_list = [o[:5].rstrip()
                          for o in output.split('\n') if 'vtt' in o]
@@ -51,7 +51,7 @@ def DownloadSubtitlesGUI():
             lang = values['lang'] or 'en'
             print(f'Downloading subtitle for {lang}...')
             window.refresh()
-            command = [youtube_executable + f' --sub-lang {lang} --write-sub {link}', ]
+            command = [f'{youtube_executable} --sub-lang {lang} --write-sub {link}']
             print(ExecuteCommandSubprocess(command, wait=True, quiet=False))
             print('Done')
     window.close()

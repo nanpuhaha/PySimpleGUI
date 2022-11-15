@@ -11,12 +11,12 @@ sg.theme('Dark Red')
 
 # ------ Some functions to help generate data for the table ------
 def word():
-    return ''.join(random.choice(string.ascii_lowercase) for i in range(10))
+    return ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
 def number(max_val=1000):
     return random.randint(0, max_val)
 
 def make_table(num_rows, num_cols):
-    data = [[j for j in range(num_cols)] for i in range(num_rows)]
+    data = [list(range(num_cols)) for _ in range(num_rows)]
     data[0] = [word() for __ in range(num_cols)]
     for i in range(1, num_rows):
         data[i] = [word(), *[number() for i in range(num_cols - 1)]]
@@ -24,7 +24,7 @@ def make_table(num_rows, num_cols):
 
 # ------ Make the Table Data ------
 data = make_table(num_rows=15, num_cols=6)
-headings = [str(data[0][x])+'     ..' for x in range(len(data[0]))]
+headings = [f'{str(data[0][x])}     ..' for x in range(len(data[0]))]
 
 # ------ Window Layout ------
 layout = [[sg.Table(values=data[1:][:], headings=headings, max_col_width=25,

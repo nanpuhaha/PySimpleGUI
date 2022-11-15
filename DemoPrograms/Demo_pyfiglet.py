@@ -54,7 +54,7 @@ def main():
     while True:  # Event Loop
         event, values = window.read()
         # print(event,values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if event == '-FONT-SIZE-':
             MULTILINE_FONT = (MULTILINE_FONT[0], values['-FONT-SIZE-'])

@@ -63,7 +63,19 @@ print(f'line len = {LINE_LENGTH}')
 #  ------------- define the window layout -------------
 # number of lines of text elements. Depends on cameras image size and the variable SC (scaller)
 
-layout = [[sg.Text(i, size=(LINE_LENGTH, 1), font=('Courier', font_size), pad=(0, 0), key='-OUT-'+str(i))] for i in range(NUM_LINES)]
+layout = [
+    [
+        sg.Text(
+            i,
+            size=(LINE_LENGTH, 1),
+            font=('Courier', font_size),
+            pad=(0, 0),
+            key=f'-OUT-{str(i)}',
+        )
+    ]
+    for i in range(NUM_LINES)
+]
+
 
 layout += [[sg.Button('Exit', size=(5, 1)),
             sg.Text('GCF', size=(4, 1)),
@@ -94,6 +106,6 @@ while True:
 
     # "Draw" the image in the window, one line of text at a time!
     for i, r in enumerate(chars[img.astype(int)]):
-        window['-OUT-'+str(i)].update("".join(r))
+        window[f'-OUT-{str(i)}'].update("".join(r))
 
 window.close()

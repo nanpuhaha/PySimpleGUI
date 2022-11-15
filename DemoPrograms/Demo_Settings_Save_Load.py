@@ -48,7 +48,8 @@ def save_settings(settings_file, settings, values):
 def create_settings_window(settings):
     sg.theme(settings['theme'])
 
-    def TextLabel(text): return sg.Text(text+':', justification='r', size=(15,1))
+    def TextLabel(text):
+        return sg.Text(f'{text}:', justification='r', size=(15,1))
 
     layout = [  [sg.Text('Settings', font='Any 15')],
                 [TextLabel('Max Users'), sg.Input(key='-MAX USERS-')],

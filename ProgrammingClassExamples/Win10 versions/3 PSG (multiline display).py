@@ -28,7 +28,7 @@ window = sg.Window('Enter & Display Data').Layout(layout)
 string = ''
 S=[]
 while True:
-  
+
     button, value = window.Read() 
     if button is not None:
     #use string formatting - best way? plus Courier New font - non-proportional font

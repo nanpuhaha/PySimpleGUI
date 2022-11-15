@@ -23,6 +23,6 @@ while True:     # The Event Loop
     if event == 'SEND':
         query = value['-QUERY-'].rstrip()
         # EXECUTE YOUR COMMAND HERE
-        print('The command you entered was {}'.format(query), flush=True)
+        print(f'The command you entered was {query}', flush=True)
 
 window.close()

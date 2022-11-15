@@ -21,13 +21,13 @@ layout = [
     [sg.Submit()]
    ]
 
-window = sg.Window('Converter').Layout(layout)   
+window = sg.Window('Converter').Layout(layout)
 button, value = window.Read()
 if button is None:
     #windows was closed without button being pressed
     exit(0)
 fahrenheit = round(9/5*float(value[0]) +32, 1)
-result = 'Temperature in Fahrenheit is: ' + str(fahrenheit)
+result = f'Temperature in Fahrenheit is: {str(fahrenheit)}'
 sg.Popup('Result',result)
 
 

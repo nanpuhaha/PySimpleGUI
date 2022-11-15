@@ -23,7 +23,7 @@ def Launcher():
 
     namesonly = [f for f in os.listdir(ROOT_PATH) if f.endswith('.py')]
 
-    if len(namesonly) == 0:
+    if not namesonly:
         namesonly = ['test 1', 'test 2', 'test 3']
 
     sg.set_options(element_padding=(0, 0),
@@ -46,7 +46,7 @@ def Launcher():
     # ---===--- Loop taking in user input and executing appropriate program --- #
     while True:
         event, values = window.read()
-        if event == 'EXIT' or event == sg.WIN_CLOSED:
+        if event in ['EXIT', sg.WIN_CLOSED]:
             break           # exit button clicked
         if event == 'Program 1':
             print('Run your program 1 here!')
@@ -54,7 +54,7 @@ def Launcher():
             print('Run your program 2 here!')
         elif event == 'Run':
             file = values['demofile']
-            print('Launching %s' % file)
+            print(f'Launching {file}')
             ExecuteCommandSubprocess('python', os.path.join(ROOT_PATH, file))
         else:
             print(event)
@@ -69,7 +69,7 @@ def ExecuteCommandSubprocess(command, *args, wait=False):
             arg_string = ' '.join([str(arg) for arg in args])
             # for arg in args:
             #     arg_string += ' ' + str(arg)
-            print('python3 ' + arg_string)
+            print(f'python3 {arg_string}')
             sp = subprocess.Popen(['python3 ', arg_string],
                                   shell=True,
                                   stdout=subprocess.PIPE,

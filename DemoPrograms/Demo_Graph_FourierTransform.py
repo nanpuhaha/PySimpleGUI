@@ -16,7 +16,7 @@ import time
 def push(v):
     if len(buffer)==size:
         del buffer[-1]
-    buffer[0:0] = [v]
+    buffer[:0] = [v]
 
 def update(i):
     draw.Erase()
@@ -61,7 +61,7 @@ while True:
     start_time = time.time()
 
     event, values = window.read(timeout=timeout)
-    if event == None:
+    if event is None:
         break
 
     update(i)

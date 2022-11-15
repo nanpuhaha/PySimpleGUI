@@ -50,7 +50,7 @@ class Playfield():
         self.space.add(ground_shape)
 
     def add_random_balls(self):
-        for i in range(1, 200):
+        for _ in range(1, 200):
             x = random.randint(0, 600)
             y = random.randint(0, 400)
             r = random.randint(1, 10)
@@ -78,11 +78,17 @@ graph_elem = sg.Graph((600, 400), (0, 400), (600, 0),
                       background_color='lightblue')
 
 hostname = socket.gethostbyname(socket.gethostname())
-layout = [[sg.Text('Ball Test'), sg.Text('My IP {}'.format(hostname))],
-          [graph_elem],
-          [sg.Button('Kick'), sg.Button('Player 1 Shoot', size=(15, 2)),
-           sg.Button('Player 2 Shoot', size=(15, 2)), sg.Button('Exit')]
-          ]
+layout = [
+    [sg.Text('Ball Test'), sg.Text(f'My IP {hostname}')],
+    [graph_elem],
+    [
+        sg.Button('Kick'),
+        sg.Button('Player 1 Shoot', size=(15, 2)),
+        sg.Button('Player 2 Shoot', size=(15, 2)),
+        sg.Button('Exit'),
+    ],
+]
+
 
 window = sg.Window('Window Title', layout, disable_close=True, finalize=True)
 
@@ -97,7 +103,7 @@ while True:  # Event Loop
     # print(event, values)
     if event in (sg.WIN_CLOSED, 'Exit'):
         break
-    
+
     area.space.step(0.01)
 
     if event == 'Player 2 Shoot':

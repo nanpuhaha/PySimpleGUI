@@ -97,7 +97,7 @@ def main(location):
     saved_date = sg.user_settings_get_entry('-start date-', (1,1,2021))
     start_date = datetime.datetime(saved_date[2], saved_date[0], saved_date[1])
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         # First update the status information
         delta = datetime.datetime.now() - start_date
         window['-MAIN INFO-'].update(f'{delta.days}')
@@ -108,7 +108,7 @@ def main(location):
         # -------------- Start of normal event loop --------------
         event, values = window.read(timeout=UPDATE_FREQUENCY_MILLISECONDS)
         print(event, values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if event == 'Edit Me':
             sg.execute_editor(__file__)
@@ -139,13 +139,19 @@ def main(location):
                 # this is result of hacking code down to 99 lines in total. Not tried it before. Interesting test.
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Main Font':
-            font = sg.popup_get_text('Main Information Font and Size (e.g. courier 70)', default_text=sg.user_settings_get_entry('-main number font-'), keep_on_top=True)
-            if font:
+            if font := sg.popup_get_text(
+                'Main Information Font and Size (e.g. courier 70)',
+                default_text=sg.user_settings_get_entry('-main number font-'),
+                keep_on_top=True,
+            ):
                 sg.user_settings_set_entry('-main number font-', font)
                 _, window = window.close(), make_window(loc)
         elif event == 'Set Title Font':
-            font = sg.popup_get_text('Title Font and Size (e.g. courier 8)', default_text=sg.user_settings_get_entry('-title font-'), keep_on_top=True)
-            if font:
+            if font := sg.popup_get_text(
+                'Title Font and Size (e.g. courier 8)',
+                default_text=sg.user_settings_get_entry('-title font-'),
+                keep_on_top=True,
+            ):
                 sg.user_settings_set_entry('-title font-', font)
                 _, window = window.close(), make_window(loc)
 

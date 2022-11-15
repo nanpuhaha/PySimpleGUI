@@ -328,9 +328,7 @@ def running_trinket():
     :return: True if sys.platform indicates Linux and the number of environment variables is 1
     :rtype:  (bool)
     """
-    if len(os.environ) == 1 and sys.platform.startswith('linux'):
-        return True
-    return False
+    return bool(len(os.environ) == 1 and sys.platform.startswith('linux'))
 
 
 def running_replit():
@@ -343,9 +341,7 @@ def running_replit():
     :return: True if sys.platform indicates Linux and setting REPL_OWNER is found in the environment variables
     :rtype:  (bool)
     """
-    if 'REPL_OWNER' in os.environ and sys.platform.startswith('linux'):
-        return True
-    return False
+    return bool('REPL_OWNER' in os.environ and sys.platform.startswith('linux'))
 
 
 

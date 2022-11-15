@@ -159,9 +159,7 @@ class Scores:
     def win_loss_check(self):
         if self.player_1_score >= num_rounds:
             return 'Left player'
-        if self.player_2_score >= num_rounds:
-            return 'Right player'
-        return None
+        return 'Right player' if self.player_2_score >= num_rounds else None
 
     def increment_player_1(self):
         self.player_1_score += 1
@@ -298,7 +296,7 @@ def pong():
 
             winner = scores.win_loss_check()
             if winner is not None:
-                sg.popup('Game Over', winner + ' won!!', no_titlebar=True)
+                sg.popup('Game Over', f'{winner} won!!', no_titlebar=True)
                 game_playing = False
                 goto_menu(window)
 

@@ -38,13 +38,35 @@ def make_window():
 
     sg.theme(sg.user_settings_get_entry('theme', 'DarkBlue2'))  # set the theme
 
-    layout = [[sg.Text('Settings Window')],
-              [sg.Input(sg.user_settings_get_entry('input', ''), k='-IN-')],
-              [sg.Listbox(sg.theme_list(), default_values=[sg.user_settings_get_entry('theme')], size=(15, 10), k='-LISTBOX-')],
-              [sg.CB('Option 1', sg.user_settings_get_entry('option1', True), k='-CB1-')],
-              [sg.CB('Option 2', sg.user_settings_get_entry('option2', False), k='-CB2-')],
-              [sg.T('Settings file = ' + sg.user_settings_filename())],
-              [sg.Button('Save'), sg.Button('Exit without saving', k='Exit')]]
+    layout = [
+        [sg.Text('Settings Window')],
+        [sg.Input(sg.user_settings_get_entry('input', ''), k='-IN-')],
+        [
+            sg.Listbox(
+                sg.theme_list(),
+                default_values=[sg.user_settings_get_entry('theme')],
+                size=(15, 10),
+                k='-LISTBOX-',
+            )
+        ],
+        [
+            sg.CB(
+                'Option 1',
+                sg.user_settings_get_entry('option1', True),
+                k='-CB1-',
+            )
+        ],
+        [
+            sg.CB(
+                'Option 2',
+                sg.user_settings_get_entry('option2', False),
+                k='-CB2-',
+            )
+        ],
+        [sg.T(f'Settings file = {sg.user_settings_filename()}')],
+        [sg.Button('Save'), sg.Button('Exit without saving', k='Exit')],
+    ]
+
 
     return sg.Window('A Settings Window', layout)
 

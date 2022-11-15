@@ -55,7 +55,7 @@ def main():
 
     last_cpu = i = 0
     prev_x, prev_y = 0, 0
-    while True:                                 # the Event Loop
+    while True:                             # the Event Loop
         event, values = window.read(timeout=500)
         if event in ('Quit', None):  # always give ths user a way out
             break
@@ -67,8 +67,7 @@ def main():
         # show current cpu usage at top
         output.update(current_cpu/10)
 
-        if current_cpu > SAMPLE_MAX:
-            current_cpu = SAMPLE_MAX
+        current_cpu = min(current_cpu, SAMPLE_MAX)
         new_x, new_y = i, current_cpu
 
         if i >= SAMPLES:

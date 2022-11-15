@@ -68,10 +68,23 @@ def title_bar(title, text_color, background_color):
     bc = background_color
     tc = text_color
 
-    return [sg.Col([[sg.T(title, text_color=tc, background_color=bc)]], pad=(0, 0), background_color=bc),
-            sg.Col([[sg.T('_', text_color=tc, background_color=bc, enable_events=True, key='-MINIMIZE-'),
-                     sg.Text('❎', text_color=tc, background_color=bc, enable_events=True, key='Exit')]], element_justification='r', key='-TITLEBAR-',
-                   pad=(0, 0), background_color=bc)]
+    return [
+        sg.Col([[sg.T(title, tc=tc, bc=bc)]], pad=(0, 0), bc=bc),
+        sg.Col(
+            [
+                [
+                    sg.T(
+                        '_', tc=tc, bc=bc, enable_events=True, key='-MINIMIZE-'
+                    ),
+                    sg.Text('❎', tc=tc, bc=bc, enable_events=True, key='Exit'),
+                ]
+            ],
+            element_justification='r',
+            key='-TITLEBAR-',
+            pad=(0, 0),
+            bc=bc,
+        ),
+    ]
 
 
 def main():
@@ -96,7 +109,7 @@ def main():
     counter = 0
     while True:  # Event Loop
         window, event, values = sg.read_all_windows(timeout=100)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
 
         # ------ events to handle minimize and restore of window ------

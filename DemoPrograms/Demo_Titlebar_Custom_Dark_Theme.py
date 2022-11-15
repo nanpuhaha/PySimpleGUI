@@ -56,8 +56,23 @@ def title_bar(title, text_color, background_color):
     bc = background_color
     tc = text_color
 
-    return [sg.Col([[sg.T(title,text_color=tc, background_color=bc )]], pad=(0, 0), background_color=bc),
-     sg.Col([[sg.T('_', text_color=tc, background_color=bc, enable_events=True, key='-MINIMIZE-'),sg.Text('❎', text_color=tc, background_color=bc, enable_events=True, key='Exit')]], element_justification='r', key='-C-', pad=(0, 0), background_color=bc)]
+    return [
+        sg.Col([[sg.T(title, tc=tc, bc=bc)]], pad=(0, 0), bc=bc),
+        sg.Col(
+            [
+                [
+                    sg.T(
+                        '_', tc=tc, bc=bc, enable_events=True, key='-MINIMIZE-'
+                    ),
+                    sg.Text('❎', tc=tc, bc=bc, enable_events=True, key='Exit'),
+                ]
+            ],
+            element_justification='r',
+            key='-C-',
+            pad=(0, 0),
+            bc=bc,
+        ),
+    ]
 
 
 
@@ -81,10 +96,10 @@ def main():
 
     window['-C-'].expand(True, False, False)        # expand the titlebar's rightmost column so that it resizes correctly
 
-    while True:             # Event Loop
+    while True:         # Event Loop
         event, values = window.read()
         print(event, values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        if event in [sg.WIN_CLOSED, 'Exit']:
             break
         if event == '-MINIMIZE-':
             window.hide()

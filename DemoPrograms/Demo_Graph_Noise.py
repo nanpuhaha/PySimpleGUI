@@ -24,7 +24,7 @@ def main():
 
     window = sg.Window('Enter graph size', layout)
     event, values = window.read()
-    if event == sg.WIN_CLOSED or event == 'Cancel':
+    if event in [sg.WIN_CLOSED, 'Cancel']:
         return
 
     CANVAS_SIZE = int(values['w']), int(values['h'])
@@ -54,7 +54,7 @@ def main():
     figures = []
     while True:
         event, values = window.read(timeout=0)
-        if event == 'Quit' or event == sg.WIN_CLOSED:
+        if event in ['Quit', sg.WIN_CLOSED]:
             break
 
         graph_offset = random.randint(-10, 10)
@@ -62,16 +62,14 @@ def main():
 
         if graph_value > SAMPLE_MAX:
             graph_value = SAMPLE_MAX
-        if graph_value < 0:
-            graph_value = 0
-
+        graph_value = max(graph_value, 0)
         new_x, new_y = i, graph_value
         prev_value = graph_value
 
         if i >= SAMPLES:
             graph.delete_figure(figures[0])
             figures = figures[1:]
-            for count, figure in enumerate(figures):
+            for figure in figures:
                 graph.move_figure(figure, -STEP_SIZE, 0)
             prev_x = prev_x - STEP_SIZE
 

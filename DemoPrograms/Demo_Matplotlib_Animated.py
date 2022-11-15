@@ -43,7 +43,7 @@ def main():
     ax.grid()
     fig_agg = draw_figure(canvas, fig)
     # make a bunch of random data points
-    dpts = [randint(0, 10) for x in range(NUM_DATAPOINTS)]
+    dpts = [randint(0, 10) for _ in range(NUM_DATAPOINTS)]
 
     for i in range(len(dpts)):
 

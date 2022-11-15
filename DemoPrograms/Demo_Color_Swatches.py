@@ -690,8 +690,12 @@ def make_window():
             except IndexError as e:
                 break
             except Exception as e:
-                sg.popup_error(f'Error while creating color window. Something with the Text elements perhaps....', e,
-                               f'rows = {rows}  i = {i}')
+                sg.popup_error(
+                    'Error while creating color window. Something with the Text elements perhaps....',
+                    e,
+                    f'rows = {rows}  i = {i}',
+                )
+
                 break
         layout.append(row)
 
@@ -713,9 +717,18 @@ def main():
         else:
             color, color_hex = hex_to_color[event], event
         # -- Create a secondary window that shows white and black text on chosen color
-        layout2 = [[sg.Text(color_hex + ' on clipboard')],
-                   [sg.DummyButton(color, button_color=('white',color), tooltip=color_hex),
-                    sg.DummyButton(color, button_color=('black',color), tooltip=color_hex)]]
+        layout2 = [
+            [sg.Text(f'{color_hex} on clipboard')],
+            [
+                sg.DummyButton(
+                    color, button_color=('white', color), tooltip=color_hex
+                ),
+                sg.DummyButton(
+                    color, button_color=('black', color), tooltip=color_hex
+                ),
+            ],
+        ]
+
         window2 = sg.Window('Buttons with white and black text', layout2, keep_on_top=True, finalize=True)
         sg.clipboard_set(color_hex)
 

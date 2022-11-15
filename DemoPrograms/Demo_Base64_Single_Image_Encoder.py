@@ -35,9 +35,10 @@ def convert_file_to_base64(filename):
 
 
 if __name__ == '__main__':
-    filename = sg.popup_get_file('Source Image will be encoded and results placed on clipboard', title='Base64 Encoder')
-
-    if filename:
+    if filename := sg.popup_get_file(
+        'Source Image will be encoded and results placed on clipboard',
+        title='Base64 Encoder',
+    ):
         convert_file_to_base64(filename)
     else:
         sg.popup_cancel('Cancelled - No valid file entered')
